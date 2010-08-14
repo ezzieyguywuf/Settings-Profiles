@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    style="@style/setting_padding"
+    android:minWidth="300sp"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <TextView android:id="@+id/help_text"
+        style="@style/help_text"
+        android:text="@string/help_text"
+        android:layout_weight="1"/>
+    <LinearLayout android:orientation="horizontal"
+        style="@style/setting_padding"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0">
+        <CheckBox android:id="@+id/show_dialog_pref"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="0"/>
+        <TextView style="@style/help_text"
+            android:text="@string/help_check_text"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    <Button android:id="@+id/ok_help"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_weight="0"
+        android:gravity="center"
+        android:text="@string/done"/>
+</LinearLayout>

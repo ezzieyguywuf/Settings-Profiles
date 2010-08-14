@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Settings Profiles</string>
+    <string name="empty_setting">There are no settings to show. *Bug*</string>
+    <string name="no_brightness">You have no setting! OH NO!</string>
+    <string name="menu_show">Show Next Setting</string>
+    <string name="Profile1">First Profile</string>
+    <string name="Profile2">Second Profile</string>
+    <string name="Profile3">Third Profile</string>
+    <string name="Profile4">Fourth Profile</string>
+    <string name="Profile5">Fifth Profile</string>
+
+    <string name="brightness">Brightness</string>
+    <string name="ringer">Ringer</string>
+    <string name="OnOff">On/Off</string>
+    <string name="vibrate">Vibrate</string>
+
+    <string name="silent">Silent</string>
+    <string name="vibration_only">Vibrate Only</string>
+    <string name="sound_only">Sound Only</string>
+    <string name="sound_and_vibration">Sound and Vibrate</string>
+
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="ring_vol">Ringer Volume</string>
+    <string name="notif_vol">Notification Volume</string>
+    <string name="media_vol">Media Volume</string>
+    <string name="alarm_vol">Alarm Volume</string>
+    <string name="voice_vol">Voice Call Volume</string>
+    <string name="sys_vol">System Volume</string>
+    <string name="volume_control">Volume Control</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="notification_bind">Check if you want ringer and notification volumes to be equal</string>
+    <string name="wifi">Wifi</string>
+    <string name="gps">GPS</string>
+
+    <string name="bluetooth_disabled">Bluetooth Disabled</string>
+    <string name="bluetooth_disabling">Disabling...</string>
+    <string name="bluetooth_enabled">Bluetooth Enabled</string>
+    <string name="bluetooth_enabling">Enabling...</string>
+
+    <string name="wifi_disabled">Wifi Disabled</string>
+    <string name="wifi_disabling">Disabling...</string>
+    <string name="wifi_enabled">Wifi Enabled</string>
+    <string name="wifi_enabling">Enabling...</string>
+    <string name="wifi_unknown">Wifi is in an unknown state</string>
+
+    <string name="help_title">Help Dialog</string>
+    <string name="help_text">Welcome to Settings Profiles. In order to quickly set a profile, simply tap on the profile that you wish to set. If you wish to edit any profile, just long-click on the respective profile. If you would like to see this help dialog again, hit menu from this screen.</string>
+    <string name="help_check_text">Please check here if you do not want to see this dialog again</string>
+</resources>

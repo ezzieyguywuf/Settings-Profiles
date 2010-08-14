@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    style="@style/setting_padding"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+  <View style="@style/horiz_bar"/>
+
+  <LinearLayout android:orientation="horizontal"
+      style="@style/padding"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      <TextView android:text="@string/brightness"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="0"
+          android:padding="4px"
+          android:gravity="center_vertical"/>
+      <SeekBar android:id="@+id/brightness_setting"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+        />
+  </LinearLayout>
+
+  <View style="@style/horiz_bar"/>
+
+  <LinearLayout android:orientation="horizontal"
+      style="@style/padding"
+      android:layout_width = "fill_parent"
+      android:layout_height = "wrap_content">
+      <TextView 
+          style="@style/setting_title"
+          android:layout_weight="1"
+          android:text="@string/ringer"/>
+      <TextView android:id="@+id/value_of_vibration"
+          android:layout_weight="2"
+          style="@style/status"
+          android:text="No Value" />
+      <Button android:id="@+id/Popup"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/vibrate"
+          android:layout_weight="0"/>
+      <ToggleButton android:id="@+id/OnOff"
+          android:layout_width="wrap_content"
+          android:layout_height="fill_parent"
+          android:layout_weight="0"/>
+  </LinearLayout>
+
+  <View style="@style/horiz_bar"/>
+
+  <TextView android:id="@+id/volume_popup"
+      android:paddingTop="20sp"
+      android:paddingBottom="20sp"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:gravity="center"
+      android:textSize="16sp"
+      android:text="@string/volume_control"/>
+
+  <View style="@style/horiz_bar"/>
+
+  <LinearLayout android:orientation="horizontal"
+      stlye="@style/padding"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      <TextView android:text="@string/bluetooth"
+          style="@style/setting_title"
+          android:layout_weight="0"/>
+      <TextView android:text="placeholder"
+          android:id="@+id/bluetooth_status"
+          style="@style/status"
+          android:layout_weight="1"/>
+      <ToggleButton android:id="@+id/bluetooth"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="0"/>
+  </LinearLayout>
+
+  <View style="@style/horiz_bar"/>
+
+  <LinearLayout android:orientation="horizontal"
+      stlye="@style/padding"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      <TextView android:text="@string/wifi"
+          style="@style/setting_title"
+          android:layout_weight="1"/>
+      <TextView android:text="placeholder"
+          android:id="@+id/wifi_status"
+          style="@style/status"
+          android:layout_weight="1"/>
+      <ToggleButton android:id="@+id/wifi"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="0"/>
+  </LinearLayout>
+
+  <View style="@style/horiz_bar"/>
+<!--
+   -  <LinearLayout android:orientation="horizontal"
+   -      stlye="@style/padding"
+   -      android:layout_width="fill_parent"
+   -      android:layout_height="wrap_content">
+   -      <TextView android:text="@string/gps"
+   -          style="@style/setting_title"
+   -          android:layout_weight="1"/>
+   -      <ToggleButton android:id="@+id/gps"
+   -          android:layout_width="wrap_content"
+   -          android:layout_height="wrap_content"
+   -          android:layout_weight="0"/>
+   -  </LinearLayout>
+   -
+   -  <View style="@style/horiz_bar"/>
+   -->
+
+</LinearLayout>

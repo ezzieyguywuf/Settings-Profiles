@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:minWidth="400sp">
+
+  <LinearLayout android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      <CheckBox android:id="@+id/notification_bind"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="0"/>
+      <TextView android:layout_weight="1"
+          android:layout_height="wrap_content"
+          android:layout_width="fill_parent"
+          android:text="@string/notification_bind"
+          android:gravity="center"/>
+  </LinearLayout>
+
+  <LinearLayout android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="left"
+          android:text="@string/ring_vol"/>
+      <TextView android:id="@+id/ring_value"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="1"
+          android:text="0"/>
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="/"/>
+      <TextView android:id="@+id/ring_max"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="0"/>
+
+  </LinearLayout>
+
+  <SeekBar android:id="@+id/ringer_volume"
+      style="@style/seek_dialog"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="0"
+      />
+
+   <LinearLayout android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="left"
+          android:text="@string/notif_vol"/>
+      <TextView android:id="@+id/notif_value"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="1"
+          android:text="0"/>
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="/"/>
+      <TextView android:id="@+id/notif_max"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="0"/>
+
+  </LinearLayout> 
+
+  <SeekBar android:id="@+id/notification_volume"
+      style="@style/seek_dialog"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="0"
+    />
+
+   <LinearLayout android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="left"
+          android:text="@string/media_vol"/>
+      <TextView android:id="@+id/media_value"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="1"
+          android:text="0"/>
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="/"/>
+      <TextView android:id="@+id/media_max"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="0"/>
+  </LinearLayout> 
+
+  <SeekBar android:id="@+id/media_volume"
+      style="@style/seek_dialog"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="0"
+    />
+
+   <LinearLayout android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="left"
+          android:text="@string/alarm_vol"/>
+      <TextView android:id="@+id/alarm_value"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="1"
+          android:text="0"/>
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="/"/>
+      <TextView android:id="@+id/alarm_max"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="0"/>
+  </LinearLayout> 
+
+  <SeekBar android:id="@+id/alarm_volume"
+      style="@style/seek_dialog"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="0"
+    />
+
+   <LinearLayout android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="left"
+          android:text="@string/voice_vol"/>
+      <TextView android:id="@+id/voice_value"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="1"
+          android:text="0"/>
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="/"/>
+      <TextView android:id="@+id/voice_max"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="0"/>
+  </LinearLayout> 
+
+  <SeekBar android:id="@+id/voice_call_volume"
+      style="@style/seek_dialog"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="0"
+    />
+
+   <LinearLayout android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="left"
+          android:text="@string/sys_vol"/>
+      <TextView android:id="@+id/system_value"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="1"
+          android:text="0"/>
+      <TextView 
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="/"/>
+      <TextView android:id="@+id/system_max"
+          style="@style/volume_dialog"
+          android:gravity="right"
+          android:layout_weight="0"
+          android:text="0"/>
+  </LinearLayout> 
+
+  <SeekBar android:id="@+id/system_volume"
+      style="@style/seek_dialog"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:layout_weight="0"
+    />
+
+   <LinearLayout android:orientation="horizontal"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+
+      <Button android:id="@+id/volume_done"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:layout_gravity="center"
+          android:text="@string/done"
+          android:layout_weight="1"/>
+      <Button android:id="@+id/volume_cancel"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:layout_gravity="center"
+          android:text="@string/cancel"
+          android:layout_weight="1"/>
+  </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,57 @@
+package com.abi.profiles;
+
+import android.content.Context;
+import android.content.ContentResolver;
+import android.provider.Settings.System;
+import android.database.Cursor;
+
+public class SettingHandler{
+    private Context mCx;
+    private ContentResolver mCr;
+    private static final int NUMBER_OF_SETTINGS = 1;
+    private static final String BRIGHTNESS = System.SCREEN_BRIGHTNESS;
+
+    private int mProfNum;
+    private static final String[] ALL_SETTINGS = new String[]{BRIGHTNESS};
+    private ProfilesDbHelper mDbHelper;
+    private Cursor mCursor;
+
+    public SettingHandler(Context cx, ContentResolver cr, int profNum, ProfilesDbHelper DbHelper){
+        mCx = cx;
+        mCr = cr;
+        mProfNum = profNum;
+        mDbHelper = DbHelper;
+    }
+    public void setDefault(){
+        String value;
+        for (int item : ALL_SETTINGS){
+            value = getSetting(item);
+            java.lang.System.out.println("My variable in SettingHandler for setDefault is: "+value);
+            setSetting(item, value);
+        }
+        mDbHelper.createSetting(mProfNum, "exists", "1"); 
+    }
+    private String getSetting(int setting){
+        switch(setting){
+            case BRIGHTNESS:
+                if (mProfNum == -1){
+                    return System.getString(mCr, System.SCREEN_BRIGHTNESS);
+                }
+                else {
+                    return mDbHelper.fetchSetting(mProfNum, System.SCREEN_BRIGHTNESS);
+                }
+        }
+        return "0";
+    }
+
+    public void setAll(){
+    }
+
+    public String setSetting(int setting, String value){
+        return "0";
+    }
+
+    public void setProf(int profNum){
+        mProfNum = profNum;
+    }
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.abi.profiles"
+      android:versionCode="5"
+      android:versionName="1.2.0">
+      <uses-sdk android:minSdkVersion="5" />
+      <application android:label="@string/app_name"
+          android:icon="@drawable/profile_icon">
+          <activity android:name=".Profiles"
+                    android:label="@string/app_name">
+              <intent-filter>
+                  <action android:name="android.intent.action.MAIN" />
+                  <category android:name="android.intent.category.LAUNCHER" />
+              </intent-filter>
+          </activity>
+          <activity android:name=".SettingStore"/>
+          <activity android:name=".ProfileList"/>
+          <activity android:name=".HelpDialog"/>
+          <activity android:name="com.bwx.bequick.MainSettingsActivity"/>
+      </application>
+      <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+      <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+      <uses-permission android:name="android.permission.BLUETOOTH" />
+      <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+      <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+</manifest> 

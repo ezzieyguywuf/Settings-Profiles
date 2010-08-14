@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/layout_root"
+    android:padding="8sp"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <TextView
+        android:text="@string/silent"
+        android:id="@+id/silent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:padding="5sp"
+        android:clickable="true"
+        android:layout_weight="1"/>
+    <TextView
+        android:text="@string/vibration_only"
+        android:id="@+id/vibration_only"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:padding="5sp"
+        android:clickable="true"
+        android:layout_weight="1"/>
+    <TextView
+        android:text="@string/sound_only"
+        android:id="@+id/sound_only"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:padding="5sp"
+        android:clickable="true"
+        android:layout_weight="1"/>
+    <TextView
+        android:text="@string/sound_and_vibration"
+        android:id="@+id/sound_and_vibration"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:padding="5sp"
+        android:clickable="true"
+        android:layout_weight="1"/>
+
+</LinearLayout>
