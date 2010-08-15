@@ -9,6 +9,7 @@
     <string name="Profile3">Third Profile</string>
     <string name="Profile4">Fourth Profile</string>
     <string name="Profile5">Fifth Profile</string>
+    <string name="profile">Profile</string>
 
     <string name="brightness">Brightness</string>
     <string name="ringer">Ringer</string>

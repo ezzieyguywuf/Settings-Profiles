@@ -84,6 +84,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
 
         // Find out which profile we're dealing with. 
         mProfNum = extras.getInt("com.abi.profiles.ProfileNumber");
+        this.setTitle(this.getString(R.string.profile)+": "+String.valueOf(mProfNum));
         // If we weren't passed the Prof Num, get it from the savedInstanceState
         if (mProfNum==0){
             mProfNum = savedInstanceState.getInt("com.abi.profiles.ProfileNumber");
