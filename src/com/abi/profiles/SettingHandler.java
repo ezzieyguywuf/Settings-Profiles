@@ -24,7 +24,7 @@ import android.view.WindowManager;
 public class SettingHandler{
     private Context mCx;
     private static ContentResolver mCr;
-    private static int mProfNum;
+    private int mProfNum;
     public static ProfilesDbHelper mDbHelper;
     private static Window mWindow;
     private static final int NUMBER_OF_SETTINGS = 5;
@@ -382,6 +382,10 @@ public class SettingHandler{
             //case SHOW_HELP:
                 //mDbHelper.createSetting(mProfNum, mDbHelper.SHOW_HELP, value);
                 //break;
+            case TITLE:
+                Log.i(DEBUG_TAG, "Writing "+value+" to TITLE [SettingHandler]");
+                mDbHelper.createSetting(mProfNum, mDbHelper.TITLE, value);
+                break;
 
         }
     }
@@ -424,6 +428,8 @@ public class SettingHandler{
             //case SHOW_HELP:
                 //Log.i(DEBUG_TAG, "Trying to return setting");
                 //return mDbHelper.fetchSetting(mProfNum, mDbHelper.SHOW_HELP);
+            case TITLE:
+                return mDbHelper.fetchSetting(mProfNum, mDbHelper.TITLE);
 
         }
         return "0";
@@ -445,7 +451,8 @@ public class SettingHandler{
         SYSTEM_VOLUME,
         BLUETOOTH,
         NOTIFICATION_BIND,
-        WIFI
+        WIFI,
+        TITLE
         //GPS,
         //SHOW_HELP
     }

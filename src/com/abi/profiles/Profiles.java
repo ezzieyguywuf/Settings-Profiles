@@ -23,7 +23,13 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
     //public static final int INSERT_ID = Menu.FIRST;
     private static final String DEBUG_TAG = "QuickProfiles";
     private static SettingHandler mSettingHandler;
+    private static SettingHandler titleHandler;
     private static Window mCurrentWindow;
+    private static Button mProfile1;
+    private static Button mProfile2;
+    private static Button mProfile3;
+    private static Button mProfile4;
+    private static Button mProfile5;
 
     private static final int HELP_DIALOG_ID = 1;
 
@@ -34,7 +40,6 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         super.onCreate(savedInstanceState);
         //Log.i(DEBUG_TAG, "Trying to set content view [Profiles]");
         setContentView(R.layout.profile_list);
-        mCurrentWindow = getWindow();
 
 /*
  *        mCurrentWindow = getWindow();
@@ -53,24 +58,77 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
  */
 
         // Set up all our button listeners
-        Button profile1 = (Button) findViewById(R.id.Profile1);
-        Button profile2 = (Button) findViewById(R.id.Profile2);
-        Button profile3 = (Button) findViewById(R.id.Profile3);
-        Button profile4 = (Button) findViewById(R.id.Profile4);
-        Button profile5 = (Button) findViewById(R.id.Profile5);
+        mProfile1 = (Button) findViewById(R.id.Profile1);
+        mProfile2 = (Button) findViewById(R.id.Profile2);
+        mProfile3 = (Button) findViewById(R.id.Profile3);
+        mProfile4 = (Button) findViewById(R.id.Profile4);
+        mProfile5 = (Button) findViewById(R.id.Profile5);
 
-        profile1.setOnClickListener(this);
-        profile1.setOnLongClickListener(this);
-        profile2.setOnClickListener(this);
-        profile2.setOnLongClickListener(this);
-        profile3.setOnClickListener(this);
-        profile3.setOnLongClickListener(this);
-        profile4.setOnClickListener(this);
-        profile4.setOnLongClickListener(this);
-        profile5.setOnClickListener(this);
-        profile5.setOnLongClickListener(this);
+        mProfile1.setOnClickListener(this);
+        mProfile1.setOnLongClickListener(this);
+        mProfile2.setOnClickListener(this);
+        mProfile2.setOnLongClickListener(this);
+        mProfile3.setOnClickListener(this);
+        mProfile3.setOnLongClickListener(this);
+        mProfile4.setOnClickListener(this);
+        mProfile4.setOnLongClickListener(this);
+        mProfile5.setOnClickListener(this);
+        mProfile5.setOnLongClickListener(this);
         // done with that
 
+    }
+
+    public void onResume(){
+        super.onResume();
+        mCurrentWindow = getWindow();
+        titleHandler = new SettingHandler(this, 0, mCurrentWindow);
+        String profString = titleHandler.getSetting(SettingHandler.SettingsEnum.TITLE) ;
+        Log.i(DEBUG_TAG, "Trying to set pressed "+profString+" [Profiles]");
+        int profile = profString==null ? 0: Integer.valueOf(profString);
+        switch (profile){
+            case 0:
+                mProfile1.setPressed(false);
+                mProfile2.setPressed(false);
+                mProfile3.setPressed(false);
+                mProfile4.setPressed(false);
+                mProfile5.setPressed(false);
+                break;
+            case 1:
+                mProfile1.setPressed(true);
+                mProfile2.setPressed(false);
+                mProfile3.setPressed(false);
+                mProfile4.setPressed(false);
+                mProfile5.setPressed(false);
+                break;
+            case 2:
+                mProfile1.setPressed(false);
+                mProfile2.setPressed(true);
+                mProfile3.setPressed(false);
+                mProfile4.setPressed(false);
+                mProfile5.setPressed(false);
+                break;
+            case 3:
+                mProfile1.setPressed(false);
+                mProfile2.setPressed(false);
+                mProfile3.setPressed(true);
+                mProfile4.setPressed(false);
+                mProfile5.setPressed(false);
+                break;
+            case 4:
+                mProfile1.setPressed(false);
+                mProfile2.setPressed(false);
+                mProfile3.setPressed(false);
+                mProfile4.setPressed(true);
+                mProfile5.setPressed(false);
+                break;
+            case 5:
+                mProfile1.setPressed(false);
+                mProfile2.setPressed(false);
+                mProfile3.setPressed(false);
+                mProfile4.setPressed(false);
+                mProfile5.setPressed(true);
+                break;
+        }
     }
     /*
      *@Override
@@ -102,8 +160,12 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         }
         mSettingHandler = new SettingHandler(this, profNum, mCurrentWindow);
 
+        Log.i(DEBUG_TAG, "Trying to write "+String.valueOf(profNum)+" [Profiles]");
+        titleHandler.writeSetting(SettingHandler.SettingsEnum.TITLE, String.valueOf(profNum));
+
         for (SettingHandler.SettingsEnum item: SettingHandler.SettingsEnum.values()){
             //Log.i(DEBUG_TAG, "Loading the setting for "+item+" [ProfileList]");
+            if (item == SettingHandler.SettingsEnum.TITLE) continue;
             mSettingHandler.setSetting(item);
         }
         finish();

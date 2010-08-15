@@ -244,6 +244,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         // values are.
         for (SettingHandler.SettingsEnum item: SettingHandler.SettingsEnum.values()){
             //Log.i(DEBUG_TAG, "Loading the setting for "+item+" [ProfileList]");
+            if (item == SettingHandler.SettingsEnum.TITLE) continue;
             loadSettings(item);
         }
     }
