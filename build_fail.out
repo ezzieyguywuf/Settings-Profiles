@@ -23,7 +23,7 @@ Buildfile: /home/wolfie/Program/Android/Profiles/build.xml
 
 compile:
     [javac] /opt/android-sdk-update-manager/platforms/android-2.0/templates/android_rules.xml:248: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
-    [javac] Compiling 5 source files to /home/wolfie/Program/Android/Profiles/bin/classes
+    [javac] Compiling 2 source files to /home/wolfie/Program/Android/Profiles/bin/classes
 
 -dex:
      [echo] Converting compiled files and external libraries into /home/wolfie/Program/Android/Profiles/bin/classes.dex...

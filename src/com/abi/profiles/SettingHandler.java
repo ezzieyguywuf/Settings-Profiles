@@ -32,10 +32,13 @@ public class SettingHandler{
     public static boolean mBluetoothNewSdk;
     static {
         try {
+            //Log.i(DEBUG_TAG, "Checking if bluetoothadapter is available [SettingsHandler]");
             BluetoothHandler.checkAvailable();
+            //Log.i(DEBUG_TAG, "Success");
             mBluetoothNewSdk = true;
         }
         catch (Throwable t) {
+            //Log.i(DEBUG_TAG, "Not available [SettingHandler]");
             mBluetoothNewSdk = false;
         }
     }
@@ -290,7 +293,10 @@ public class SettingHandler{
                 if (mBluetoothNewSdk) {
                     //Log.i(DEBUG_TAG, "Trying to get an adapter [SettingHandler]");
                     BluetoothHandler btAdapter = new BluetoothHandler();
-                    if (btAdapter == null) return -1;
+                    if (btAdapter.mBtAdapter == null) {
+                        //Log.i(DEBUG_TAG, "Returning -1 [SettingHandler]");
+                        return -1;
+                    }
                     switch (Integer.valueOf(value)){
                         case 0:
                             //Log.i(DEBUG_TAG, "Trying to disable [SettingHandler]");

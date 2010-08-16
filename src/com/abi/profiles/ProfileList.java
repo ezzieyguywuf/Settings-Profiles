@@ -188,7 +188,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
                 //Log.i(DEBUG_TAG, "setBluetoothText [ProfileList]");
                 BluetoothHandler btAdapter = new BluetoothHandler();
 
-                if (btAdapter == null) {
+                if (btAdapter.mBtAdapter == null) {
                     bluetooth_text.setText(R.string.bluetooth_unavailable);
                     return;
                 }
