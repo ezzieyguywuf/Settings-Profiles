@@ -39,6 +39,7 @@
     <string name="bluetooth_disabling">Disabling...</string>
     <string name="bluetooth_enabled">Bluetooth Enabled</string>
     <string name="bluetooth_enabling">Enabling...</string>
+    <string name="bluetooth_unavailable">Bluetooth is unavailable</string>
 
     <string name="wifi_disabled">Wifi Disabled</string>
     <string name="wifi_disabling">Disabling...</string>
@@ -49,4 +50,6 @@
     <string name="help_title">Help Dialog</string>
     <string name="help_text">Welcome to Settings Profiles. In order to quickly set a profile, simply tap on the profile that you wish to set. If you wish to edit any profile, just long-click on the respective profile. If you would like to see this help dialog again, hit menu from this screen.</string>
     <string name="help_check_text">Please check here if you do not want to see this dialog again</string>
+
+    <string name="shortcut_name">Example</string>
 </resources>

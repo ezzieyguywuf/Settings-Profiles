@@ -2,8 +2,6 @@ package com.abi.profiles;
 
 import android.app.Activity;
 
-import android.bluetooth.BluetoothAdapter;
-
 import android.content.ContentResolver;
 import android.content.Context;
 
@@ -31,7 +29,16 @@ public class SettingHandler{
 
     //private static final SettingsEnum ALL_SETTINGS;
     private static final String DEBUG_TAG = "QuickProfiles";
-    
+    public static boolean mBluetoothNewSdk;
+    static {
+        try {
+            BluetoothHandler.checkAvailable();
+            mBluetoothNewSdk = true;
+        }
+        catch (Throwable t) {
+            mBluetoothNewSdk = false;
+        }
+    }
 
     // from android.provider.Settings
     public static final String NOTIFICATIONS_USE_RING_VOLUME = "notifications_use_ring_volume";
@@ -43,9 +50,12 @@ public class SettingHandler{
         mCr = mCx.getContentResolver();
         mProfNum = profNum;
         mDbHelper = new ProfilesDbHelper(mCx);
-        mDbHelper.open();
         mWindow = window;
         mAudioManager = (AudioManager) mCx.getSystemService(mCx.AUDIO_SERVICE);
+
+        if (mAudioManager == null) {
+            //Log.e(DEBUG_TAG, "It seems we were unable to get an AudioManager instance for some reason [SettingHandler]");
+        }
 
     }
 
@@ -134,8 +144,8 @@ public class SettingHandler{
             case NOTIFICATION_BIND:
                 //Log.i(DEBUG_TAG, "Checking current bind status [SettingHandler];");
                 value = System.getString(mCr, NOTIFICATIONS_USE_RING_VOLUME);
-                //Log.i(DEBUG_TAG, "Writing "+value+" as bind setting [SettingHandler]");
-                writeSetting(SettingsEnum.NOTIFICATION_BIND, value);
+                //Log.i(DEBUG_TAG, "Writing "+(value == null ? "0" : value)+" as bind setting [SettingHandler]");
+                writeSetting(SettingsEnum.NOTIFICATION_BIND, value==null ? "0" : value);
                 break;
         }
         return value;
@@ -277,26 +287,44 @@ public class SettingHandler{
                 }
                 break;
             case BLUETOOTH:
-                BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-                //Log.i(DEBUG_TAG, "breaking");
-                //Log.i(DEBUG_TAG, "Setting bluetooth state [SettingHandler]");
-                if (btAdapter == null){
-                    //Log.e(DEBUG_TAG, "Seems that bluetooth is not supported for this device");
-                    return -1;
+                if (mBluetoothNewSdk) {
+                    //Log.i(DEBUG_TAG, "Trying to get an adapter [SettingHandler]");
+                    BluetoothHandler btAdapter = new BluetoothHandler();
+                    if (btAdapter == null) return -1;
+                    switch (Integer.valueOf(value)){
+                        case 0:
+                            //Log.i(DEBUG_TAG, "Trying to disable [SettingHandler]");
+                            success = btAdapter.disable();
+                            if (success) Log.i(DEBUG_TAG, "Success [SettingHandler]");
+                            else Log.i(DEBUG_TAG, "Fail [SettingHandler]");
+                            break;
+                        case 1:
+                            //Log.i(DEBUG_TAG, "Trying to enable [SettingHandler]");
+                            success = btAdapter.enable();
+                            if (success) Log.i(DEBUG_TAG, "Success [SettingHandler]");
+                            else Log.i(DEBUG_TAG, "Fail [SettingHandler]");
+                            break;
+                    }
                 }
-                switch (Integer.valueOf(value)){
-                    case 0:
-                        //Log.i(DEBUG_TAG, "Trying to disable [SettingHandler]");
-                        success = btAdapter.disable();
-                        //if (success) Log.i(DEBUG_TAG, "Success [SettingHandler]");
-                        //else Log.i(DEBUG_TAG, "Fail [SettingHandler]");
-                        break;
-                    case 1:
-                        //Log.i(DEBUG_TAG, "Trying to enable [SettingHandler]");
-                        success = btAdapter.enable();
-                        //if (success) Log.i(DEBUG_TAG, "Success [SettingHandler]");
-                        //else Log.i(DEBUG_TAG, "Fail [SettingHandler]");
-                        break;
+                else {
+                    //Log.i(DEBUG_TAG, "No 2.0 help [SettingHandler]");
+                    OldBluetoothHandler btAdapter;
+                    try {
+                        btAdapter = new OldBluetoothHandler(mCx);
+                    }
+                    catch (Throwable e) {
+                        //Log.e(DEBUG_TAG, "Bluetooth not available, pre 2.0 [SettingHandler]");
+                        return -1;
+                    }
+                    switch (Integer.valueOf(value)){
+                        case 0:
+                            //Log.i(DEBUG_TAG, "Trying to disable bluetooth the old way [SettingHandler]");
+                            btAdapter.setEnabled(false);
+                            break;
+                        case 1:
+                            btAdapter.setEnabled(true);
+                            break;
+                    }
                 }
                 break;
             case WIFI:
@@ -383,7 +411,7 @@ public class SettingHandler{
                 //mDbHelper.createSetting(mProfNum, mDbHelper.SHOW_HELP, value);
                 //break;
             case TITLE:
-                Log.i(DEBUG_TAG, "Writing "+value+" to TITLE [SettingHandler]");
+                //Log.i(DEBUG_TAG, "Writing "+value+" to TITLE [SettingHandler]");
                 mDbHelper.createSetting(mProfNum, mDbHelper.TITLE, value);
                 break;
 

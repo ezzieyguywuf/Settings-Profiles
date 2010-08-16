@@ -77,17 +77,18 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
     private BluetoothReceiver mBluetoothReceiver;
     private WifiReceiver mWifiReceiver;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
 
         // Find out which profile we're dealing with. 
-        mProfNum = extras.getInt("com.abi.profiles.ProfileNumber");
+        mProfNum = extras.getInt(Profiles.EXTRA_KEY);
         this.setTitle(this.getString(R.string.profile)+": "+String.valueOf(mProfNum));
         // If we weren't passed the Prof Num, get it from the savedInstanceState
         if (mProfNum==0){
-            mProfNum = savedInstanceState.getInt("com.abi.profiles.ProfileNumber");
+            mProfNum = savedInstanceState.getInt(Profiles.EXTRA_KEY);
             //Log.i(DEBUG_TAG, "Resorting to savedInstanceState. mProfNum = "+mProfNum);
         }
 
@@ -118,10 +119,6 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         // This is for Bluetooth button
         // TODO make it so that bluetooth is never updated again if its not present
         mBluetooth = (ToggleButton) findViewById(R.id.bluetooth);
-        int check = mHandler.setSetting(ENUM_BLUETOOTH);
-        if (check == -1){
-            mBluetooth.setEnabled(false);
-        }
         mBluetooth.setOnCheckedChangeListener(this);
 
         // This is for the WiFi button
@@ -140,7 +137,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
     public void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
         //Log.i(DEBUG_TAG, "Saving instance state [ProfileList]");
-        outState.putInt("com.abi.profiles.ProfileNumber",mProfNum);
+        outState.putInt(Profiles.EXTRA_KEY,mProfNum);
     }
 
     @Override
@@ -148,6 +145,12 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         super.onResume();
         //Log.i(DEBUG_TAG, "Trying to resume [ProfileList]");
         mHandler.mDbHelper.open();
+
+        // Check if bluetooth is supported
+        int check = mHandler.setSetting(ENUM_BLUETOOTH);
+        if (check == -1){
+            mBluetooth.setEnabled(false);
+        }
 
         mBluetoothReceiver = new BluetoothReceiver();
         IntentFilter bluetoothChanged = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
@@ -179,28 +182,63 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         }
         
         public void setBluetoothText(){
-            //Log.i(DEBUG_TAG, "setBluetoothText [ProfileList]");
-            BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
-            if (btAdapter instanceof BluetoothAdapter){
-                TextView bluetooth_text = (TextView) mProfileList.findViewById(R.id.bluetooth_status);
+            TextView bluetooth_text = (TextView) mProfileList.findViewById(R.id.bluetooth_status);
+
+            if (SettingHandler.mBluetoothNewSdk){
+                //Log.i(DEBUG_TAG, "setBluetoothText [ProfileList]");
+                BluetoothHandler btAdapter = new BluetoothHandler();
+
+                if (btAdapter == null) {
+                    bluetooth_text.setText(R.string.bluetooth_unavailable);
+                    return;
+                }
                 int state = btAdapter.getState();
 
                 switch(state){
-                    case BluetoothAdapter.STATE_OFF:
+                    case BluetoothHandler.STATE_OFF:
                         bluetooth_text.setText(R.string.bluetooth_disabled);
                         break;
-                    case BluetoothAdapter.STATE_TURNING_OFF:
+                    case BluetoothHandler.STATE_TURNING_OFF:
                         bluetooth_text.setText(R.string.bluetooth_disabling);
                         break;
-                    case BluetoothAdapter.STATE_ON:
+                    case BluetoothHandler.STATE_ON:
                         bluetooth_text.setText(R.string.bluetooth_enabled);
                         break;
-                    case BluetoothAdapter.STATE_TURNING_ON:
+                    case BluetoothHandler.STATE_TURNING_ON:
                         bluetooth_text.setText(R.string.bluetooth_enabling);
                         break;
                 }
             }
+            else {
+                //Log.i(DEBUG_TAG, "setting bluetooth text the Old way [ProfileList]");
+                OldBluetoothHandler btAdapter;
 
+                try {
+                    btAdapter = new OldBluetoothHandler(mCx);
+                }
+                catch (Throwable t){
+                    //Log.i(DEBUG_TAG, "Bluetooth unavailable? [ProfileList]");
+                    bluetooth_text.setText(R.string.bluetooth_unavailable);
+                    return ;
+                }
+
+                int state = btAdapter.getState();
+
+                switch (state){
+                    case OldBluetoothHandler.BLUETOOTH_STATE_OFF:
+                        bluetooth_text.setText(R.string.bluetooth_disabled);
+                        break;
+                    case OldBluetoothHandler.BLUETOOTH_STATE_TURNING_OFF:
+                        bluetooth_text.setText(R.string.bluetooth_disabling);
+                        break;
+                    case OldBluetoothHandler.BLUETOOTH_STATE_ON:
+                        bluetooth_text.setText(R.string.bluetooth_enabled);
+                        break;
+                    case OldBluetoothHandler.BLUETOOTH_STATE_TURNING_ON:
+                        bluetooth_text.setText(R.string.bluetooth_enabling);
+                        break;
+                }
+            }
         }
     }
 

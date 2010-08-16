@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.app.Dialog;
+import android.os.Parcelable;
 
 public class Profiles extends Activity implements OnClickListener, OnLongClickListener {
     //public static final int INSERT_ID = Menu.FIRST;
@@ -30,6 +31,8 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
     private static Button mProfile3;
     private static Button mProfile4;
     private static Button mProfile5;
+
+    public static final String EXTRA_KEY = "com.abi.profiles";
 
     private static final int HELP_DIALOG_ID = 1;
 
@@ -56,6 +59,22 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
  *            // don't show it
  *        }
  */
+        // This stuff is  for the Launcher shortcut stuff.
+        final Intent intent = getIntent();
+        final String action = intent.getAction();
+
+        // If the intent is a request to create a shortcut, we'll do that and exit
+
+        if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
+            setupShortcut();
+            finish();
+            return;
+        }
+
+        if (Intent.EXTRA_SHORTCUT_INTENT.equals(action)){
+            setProfile(savedInstanceState.getInt(EXTRA_KEY));
+        }
+        // End Launcher shortcut stuff
 
         // Set up all our button listeners
         mProfile1 = (Button) findViewById(R.id.Profile1);
@@ -82,8 +101,13 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         super.onResume();
         mCurrentWindow = getWindow();
         titleHandler = new SettingHandler(this, 0, mCurrentWindow);
+        titleHandler.mDbHelper.open();
+
         String profString = titleHandler.getSetting(SettingHandler.SettingsEnum.TITLE) ;
-        Log.i(DEBUG_TAG, "Trying to set pressed "+profString+" [Profiles]");
+
+        titleHandler.mDbHelper.close();
+
+        //Log.i(DEBUG_TAG, "Trying to set pressed "+profString+" [Profiles]");
         int profile = profString==null ? 0: Integer.valueOf(profString);
         switch (profile){
             case 0:
@@ -158,9 +182,14 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
                 profNum = 5;
                 break;
         }
-        mSettingHandler = new SettingHandler(this, profNum, mCurrentWindow);
+        setProfile(profNum);
+    }
+    public void setProfile( int profNum) {
 
-        Log.i(DEBUG_TAG, "Trying to write "+String.valueOf(profNum)+" [Profiles]");
+        mSettingHandler = new SettingHandler(this, profNum, mCurrentWindow);
+        mSettingHandler.mDbHelper.open();
+
+        //Log.i(DEBUG_TAG, "Trying to write "+String.valueOf(profNum)+" [Profiles]");
         titleHandler.writeSetting(SettingHandler.SettingsEnum.TITLE, String.valueOf(profNum));
 
         for (SettingHandler.SettingsEnum item: SettingHandler.SettingsEnum.values()){
@@ -168,6 +197,7 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
             if (item == SettingHandler.SettingsEnum.TITLE) continue;
             mSettingHandler.setSetting(item);
         }
+        mSettingHandler.mDbHelper.close();
         finish();
     }
     
@@ -175,23 +205,23 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         Intent i = new Intent(this,ProfileList.class);
         switch (v.getId()) {
             case R.id.Profile1:{
-                i.putExtra("com.abi.profiles.ProfileNumber",1);
+                i.putExtra(EXTRA_KEY,1);
                 break;
             }
             case R.id.Profile2:{
-                i.putExtra("com.abi.profiles.ProfileNumber",2);
+                i.putExtra(EXTRA_KEY,2);
                 break;
             }
             case R.id.Profile3:{
-                i.putExtra("com.abi.profiles.ProfileNumber",3);
+                i.putExtra(EXTRA_KEY,3);
                 break;
             }
             case R.id.Profile4:{
-                i.putExtra("com.abi.profiles.ProfileNumber",4);
+                i.putExtra(EXTRA_KEY,4);
                 break;
             }
             case R.id.Profile5:{
-                i.putExtra("com.abi.profiles.ProfileNumber",5);
+                i.putExtra(EXTRA_KEY,5);
                 break;
             }
         }
@@ -217,4 +247,22 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
      *    return dialog;
      *}
      */
+    public void setupShortcut(){
+        Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
+        shortcutIntent.setClassName(this, this.getClass().getName());
+        shortcutIntent.putExtra(EXTRA_KEY, 1);
+
+        // Then, set up the container intent (the response to the caller)
+
+        Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.shortcut_name));
+        Parcelable iconResource = Intent.ShortcutIconResource.fromContext(
+                this,  R.drawable.app_sample_code);
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
+
+        // Now, return the result to the launcher
+
+        setResult(RESULT_OK, intent);
+    }
 }

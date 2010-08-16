@@ -11,7 +11,8 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int profile_icon=0x7f020000;
+        public static final int app_sample_code=0x7f020000;
+        public static final int profile_icon=0x7f020001;
     }
     public static final class id {
         public static final int OnOff=0x7f06000b;
@@ -79,14 +80,15 @@ public final class R {
         public static final int bluetooth_disabling=0x7f040020;
         public static final int bluetooth_enabled=0x7f040021;
         public static final int bluetooth_enabling=0x7f040022;
+        public static final int bluetooth_unavailable=0x7f040023;
         public static final int brightness=0x7f04000a;
         public static final int cancel=0x7f040013;
         public static final int done=0x7f040012;
         public static final int empty_setting=0x7f040001;
         public static final int gps=0x7f04001e;
-        public static final int help_check_text=0x7f04002a;
-        public static final int help_text=0x7f040029;
-        public static final int help_title=0x7f040028;
+        public static final int help_check_text=0x7f04002b;
+        public static final int help_text=0x7f04002a;
+        public static final int help_title=0x7f040029;
         public static final int media_vol=0x7f040016;
         public static final int menu_show=0x7f040003;
         public static final int no_brightness=0x7f040002;
@@ -95,6 +97,7 @@ public final class R {
         public static final int profile=0x7f040009;
         public static final int ring_vol=0x7f040014;
         public static final int ringer=0x7f04000b;
+        public static final int shortcut_name=0x7f04002c;
         public static final int silent=0x7f04000e;
         public static final int sound_and_vibration=0x7f040011;
         public static final int sound_only=0x7f040010;
@@ -104,11 +107,11 @@ public final class R {
         public static final int voice_vol=0x7f040018;
         public static final int volume_control=0x7f04001a;
         public static final int wifi=0x7f04001d;
-        public static final int wifi_disabled=0x7f040023;
-        public static final int wifi_disabling=0x7f040024;
-        public static final int wifi_enabled=0x7f040025;
-        public static final int wifi_enabling=0x7f040026;
-        public static final int wifi_unknown=0x7f040027;
+        public static final int wifi_disabled=0x7f040024;
+        public static final int wifi_disabling=0x7f040025;
+        public static final int wifi_enabled=0x7f040026;
+        public static final int wifi_enabling=0x7f040027;
+        public static final int wifi_unknown=0x7f040028;
     }
     public static final class style {
         public static final int help_text=0x7f050007;

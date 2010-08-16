@@ -117,15 +117,17 @@ vnoremap <silent> <Plug>NERDCommenterComment :call NERDComment(1, "norm")
 nnoremap <silent> <Plug>NERDCommenterComment :call NERDComment(0, "norm")
 nmap <silent> <Plug>RestoreWinPosn :call RestoreWinPosn()
 nmap <silent> <Plug>SaveWinPosn :call SaveWinPosn()
-nmap <SNR>18_WE <Plug>AlignMapsWrapperEnd
-nmap <SNR>18_WS <Plug>AlignMapsWrapperStart
+nmap <SNR>17_WE <Plug>AlignMapsWrapperEnd
+nmap <SNR>17_WS <Plug>AlignMapsWrapperStart
 imap S <Plug>ISurround
 imap s <Plug>Isurround
 imap  <Plug>Isurround
+inoremap <silent> = =:silent call AutoAlign(1)
 inoremap jk 
 let &cpo=s:cpo_save
 unlet s:cpo_save
 set autoindent
+set background=dark
 set backspace=indent,eol,start
 set cmdheight=2
 set confirm
@@ -161,10 +163,23 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +59 res/layout/volume_dialog.xml
-badd +0 src/com/abi/profiles/ProfileList.java
+badd +247 src/com/abi/profiles/ProfileList.java
+badd +1721 ~/vim/JavaImp/JavaImp.txt
+badd +26 ~/vim/JavaImp/choices.txt
+badd +58 src/com/abi/profiles/ProfilesDbHelper.java
+badd +27 src/com/abi/profiles/myDialogs.java
+badd +27 src/com/abi/profiles/SettingHandler.java
+badd +5 AndroidManifest.xml
+badd +17 res/layout/settings.xml
+badd +12 res/values/strings.xml
+badd +39 res/values/styles.xml
+badd +1 src/com/abi/profiles/Stategy.java
+badd +161 src/com/abi/profiles/Profiles.java
+badd +34 src/com/abi/profiles/HelpDialog.java
+badd +5 res/layout/help_dialog.xml
+badd +15 res/layout/volume_dialog.xml
 silent! argdel *
-edit src/com/abi/profiles/ProfileList.java
+edit AndroidManifest.xml
 set splitbelow splitright
 wincmd _ | wincmd |
 split
@@ -174,8 +189,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe '1resize ' . ((&lines * 1 + 32) / 64)
-exe '2resize ' . ((&lines * 59 + 32) / 64)
+exe '1resize ' . ((&lines * 2 + 32) / 64)
+exe '2resize ' . ((&lines * 58 + 32) / 64)
 argglobal
 enew
 file -MiniBufExplorer-
@@ -193,7 +208,6 @@ unlet s:cpo_save
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
-setlocal balloonexpr=
 setlocal nobinary
 setlocal bufhidden=delete
 setlocal nobuflisted
@@ -208,8 +222,7 @@ setlocal complete=.,w,b,u,t,i
 setlocal completefunc=
 setlocal nocopyindent
 setlocal nocursorcolumn
-set cursorline
-setlocal cursorline
+setlocal nocursorline
 setlocal define=
 setlocal dictionary=
 setlocal nodiff
@@ -233,8 +246,8 @@ setlocal formatexpr=
 setlocal formatoptions=tcq
 setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
 setlocal grepprg=
-setlocal iminsert=2
-setlocal imsearch=2
+setlocal iminsert=0
+setlocal imsearch=0
 setlocal include=
 setlocal includeexpr=
 setlocal indentexpr=
@@ -290,31 +303,29 @@ argglobal
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
-setlocal balloonexpr=
 setlocal nobinary
 setlocal bufhidden=
 setlocal buflisted
 setlocal buftype=
-setlocal cindent
+setlocal nocindent
 setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
-setlocal cinoptions=j1
+setlocal cinoptions=
 setlocal cinwords=if,else,while,do,for,switch
-setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
-setlocal commentstring=//%s
+setlocal comments=s:<!--,m:\ \ \ \ \ ,e:-->
+setlocal commentstring=<!--%s-->
 setlocal complete=.,w,b,u,t,i
 setlocal completefunc=
 setlocal nocopyindent
 setlocal nocursorcolumn
-set cursorline
-setlocal cursorline
+setlocal nocursorline
 setlocal define=
 setlocal dictionary=
 setlocal nodiff
 setlocal equalprg=
 setlocal errorformat=
 setlocal expandtab
-if &filetype != 'java'
-setlocal filetype=java
+if &filetype != 'xml'
+setlocal filetype=xml
 endif
 setlocal foldcolumn=0
 setlocal foldenable
@@ -327,15 +338,15 @@ setlocal foldminlines=1
 setlocal foldnestmax=20
 setlocal foldtext=foldtext()
 setlocal formatexpr=
-setlocal formatoptions=croql
+setlocal formatoptions=tcq
 setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
 setlocal grepprg=
-setlocal iminsert=2
-setlocal imsearch=2
+setlocal iminsert=0
+setlocal imsearch=0
 setlocal include=
-setlocal includeexpr=substitute(v:fname,'\\.','/','g')
-setlocal indentexpr=GetJavaIndent()
-setlocal indentkeys=0{,0},:,0#,!^F,o,O,e,0=extends,0=implements
+setlocal includeexpr=
+setlocal indentexpr=XmlIndentGet(v:lnum,1)
+setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,}
 setlocal noinfercase
 setlocal iskeyword=@,48-57,_,192-255
 setlocal keywordprg=
@@ -350,7 +361,7 @@ setlocal nrformats=octal,hex
 set number
 setlocal number
 setlocal numberwidth=4
-setlocal omnifunc=
+setlocal omnifunc=xmlcomplete#CompleteTags
 setlocal path=
 setlocal nopreserveindent
 setlocal nopreviewwindow
@@ -368,11 +379,11 @@ setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
 setlocal statusline=
-setlocal suffixesadd=.java
+setlocal suffixesadd=
 setlocal swapfile
 setlocal synmaxcol=3000
-if &syntax != 'java'
-setlocal syntax=java
+if &syntax != 'xml'
+setlocal syntax=xml
 endif
 setlocal tabstop=8
 setlocal tags=
@@ -383,16 +394,16 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 213 - ((29 * winheight(0) + 29) / 59)
+let s:l = 5 - ((4 * winheight(0) + 29) / 58)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-213
-normal! 073l
+5
+normal! 031l
 wincmd w
 2wincmd w
-exe '1resize ' . ((&lines * 1 + 32) / 64)
-exe '2resize ' . ((&lines * 59 + 32) / 64)
+exe '1resize ' . ((&lines * 2 + 32) / 64)
+exe '2resize ' . ((&lines * 58 + 32) / 64)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

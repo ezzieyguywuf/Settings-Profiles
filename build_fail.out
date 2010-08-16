@@ -2,6 +2,7 @@ Buildfile: /home/wolfie/Program/Android/Profiles/build.xml
     [setup] Android SDK Tools Revision 6
     [setup] Project Target: Android 2.0
     [setup] API level: 5
+    [setup] WARNING: Attribute minSdkVersion in AndroidManifest.xml (3) is lower than the project target API level (5)
     [setup] Importing rules file: platforms/android-2.0/templates/android_rules.xml
 
 -compile-tested-if-test:
@@ -22,7 +23,7 @@ Buildfile: /home/wolfie/Program/Android/Profiles/build.xml
 
 compile:
     [javac] /opt/android-sdk-update-manager/platforms/android-2.0/templates/android_rules.xml:248: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
-    [javac] Compiling 3 source files to /home/wolfie/Program/Android/Profiles/bin/classes
+    [javac] Compiling 5 source files to /home/wolfie/Program/Android/Profiles/bin/classes
 
 -dex:
      [echo] Converting compiled files and external libraries into /home/wolfie/Program/Android/Profiles/bin/classes.dex...
@@ -46,4 +47,4 @@ debug:
      [echo] Debug Package: /home/wolfie/Program/Android/Profiles/bin/Profiles-debug.apk
 
 BUILD SUCCESSFUL
-Total time: 7 seconds
+Total time: 8 seconds
