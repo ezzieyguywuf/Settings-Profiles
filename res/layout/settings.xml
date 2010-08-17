@@ -10,6 +10,34 @@
   <LinearLayout android:orientation="horizontal"
       style="@style/padding"
       android:layout_width="fill_parent"
+      android:layout_height="wrap_content" 
+      android:layout_weight="0">
+      <TextView 
+          android:paddingTop="03sp"
+          android:paddingBottom="03sp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="left"
+          android:textSize="16sp"
+          android:layout_weight="0"
+          android:text="@string/profile_name"/>
+      <TextView android:id="@+id/profile_name"
+          android:paddingTop="03sp"
+          android:paddingBottom="03sp"
+          android:paddingLeft="10sp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:gravity="left"
+          android:textSize="16sp"
+          android:layout_weight="1"
+          android:text="Profile Name"/>
+  </LinearLayout>
+
+  <View style="@style/horiz_bar"/>
+
+  <LinearLayout android:orientation="horizontal"
+      style="@style/padding"
+      android:layout_width="fill_parent"
       android:layout_height="wrap_content">
       <TextView android:text="@string/brightness"
           android:layout_width="wrap_content"

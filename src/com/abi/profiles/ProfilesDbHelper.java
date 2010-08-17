@@ -33,6 +33,7 @@ public class ProfilesDbHelper{
     public static final String GPS = "gps_onoff";
     public static final String SHOW_HELP = "show_help_yesno";
     public static final String TITLE = "title";
+    public static final String PROFILE_NAME = "profile_name";
 
     // note: most of this was copied from the Android notepad tutorial
     // so look there if you don't get it.

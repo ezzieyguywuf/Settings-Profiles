@@ -98,13 +98,17 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
     }
 
     public void onResume(){
+        //Log.i(DEBUG_TAG, "Resuming [ProfileList]");
         super.onResume();
         mCurrentWindow = getWindow();
+        //Log.i(DEBUG_TAG, "Creating titleHandler [Profiles]");
         titleHandler = new SettingHandler(this, 0, mCurrentWindow);
+        //Log.i(DEBUG_TAG, "Opening its DB [Profiles]");
         titleHandler.mDbHelper.open();
 
         String profString = titleHandler.getSetting(SettingHandler.SettingsEnum.TITLE) ;
 
+        //Log.i(DEBUG_TAG, "Closing its DB [Profiles]");
         titleHandler.mDbHelper.close();
 
         //Log.i(DEBUG_TAG, "Trying to set pressed "+profString+" [Profiles]");
@@ -167,24 +171,50 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
 
         switch (v.getId()){
             case R.id.Profile1:
+                mProfile1.setPressed(true);
+                mProfile2.setPressed(false);
+                mProfile3.setPressed(false);
+                mProfile4.setPressed(false);
+                mProfile5.setPressed(false);
                 profNum = 1;
                 break;
             case R.id.Profile2:
+                mProfile1.setPressed(false);
+                mProfile2.setPressed(true);
+                mProfile3.setPressed(false);
+                mProfile4.setPressed(false);
+                mProfile5.setPressed(false);
                 profNum = 2;
                 break;
             case R.id.Profile3:
+                mProfile1.setPressed(false);
+                mProfile2.setPressed(false);
+                mProfile3.setPressed(true);
+                mProfile4.setPressed(false);
+                mProfile5.setPressed(false);
                 profNum = 3;
                 break;
             case R.id.Profile4:
+                mProfile1.setPressed(false);
+                mProfile2.setPressed(false);
+                mProfile3.setPressed(false);
+                mProfile4.setPressed(true);
+                mProfile5.setPressed(false);
                 profNum = 4;
                 break;
             case R.id.Profile5:
+                mProfile1.setPressed(false);
+                mProfile2.setPressed(false);
+                mProfile3.setPressed(false);
+                mProfile4.setPressed(false);
+                mProfile5.setPressed(true);
                 profNum = 5;
                 break;
         }
         setProfile(profNum);
     }
     public void setProfile( int profNum) {
+        //Log.i(DEBUG_TAG, "Trying to set profile [ProfileList]");
 
         mSettingHandler = new SettingHandler(this, profNum, mCurrentWindow);
         mSettingHandler.mDbHelper.open();
@@ -248,6 +278,7 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
      *}
      */
     public void setupShortcut(){
+        //Log.i(DEBUG_TAG, "trying to setup shortcut [ProfileList]");
         Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
         shortcutIntent.setClassName(this, this.getClass().getName());
         shortcutIntent.putExtra(EXTRA_KEY, 1);

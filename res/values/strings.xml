@@ -11,6 +11,9 @@
     <string name="Profile5">Fifth Profile</string>
     <string name="profile">Profile</string>
 
+    <string name="ok">Ok</string>
+    <string name="profile_name">Profile Name: </string>
+
     <string name="brightness">Brightness</string>
     <string name="ringer">Ringer</string>
     <string name="OnOff">On/Off</string>

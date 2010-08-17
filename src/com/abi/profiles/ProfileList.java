@@ -34,6 +34,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.bluetooth.BluetoothAdapter;
 import android.net.wifi.WifiManager;
+import android.widget.EditText;
 //TODO add - screen brightness
 //         - ringer on/off
 //         - volume control
@@ -62,8 +63,9 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
     public static final SettingHandler.SettingsEnum ENUM_NOTIFICATION_BIND = SettingHandler.SettingsEnum.NOTIFICATION_BIND;
     private static final SettingHandler.SettingsEnum ENUM_WIFI = SettingHandler.SettingsEnum.WIFI;
     //private static final SettingHandler.SettingsEnum ENUM_GPS = SettingHandler.SettingsEnum.GPS;
-    private static final int VIBRATE_DIALOG_ID = 1;
-    private static final int VOLUME_DIALOG_ID = 2;
+    public static final int VIBRATE_DIALOG_ID = 1;
+    public static final int VOLUME_DIALOG_ID = 2;
+    public static final int PROFILE_NAME_ID = 3;
     private static final int SCREEN_BRIGHTNESS_OFFSET = 30;
     private static SeekBar mBrightnessLevel;
     private static Button mVibrate;
@@ -76,29 +78,34 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
     private static ProfileList mProfileList;
     private BluetoothReceiver mBluetoothReceiver;
     private WifiReceiver mWifiReceiver;
+    private TextView mProfileName;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        //Log.i(DEBUG_TAG, "onCreate is called [ProfileList]");
         Bundle extras = getIntent().getExtras();
 
         // Find out which profile we're dealing with. 
         mProfNum = extras.getInt(Profiles.EXTRA_KEY);
-        this.setTitle(this.getString(R.string.profile)+": "+String.valueOf(mProfNum));
         // If we weren't passed the Prof Num, get it from the savedInstanceState
         if (mProfNum==0){
+            Log.i(DEBUG_TAG, "Trying to read profNum... [ProfileList]");
             mProfNum = savedInstanceState.getInt(Profiles.EXTRA_KEY);
-            //Log.i(DEBUG_TAG, "Resorting to savedInstanceState. mProfNum = "+mProfNum);
+            Log.i(DEBUG_TAG, "Resorting to savedInstanceState. mProfNum = "+mProfNum);
         }
 
-        //Log.i(DEBUG_TAG, "Trying to open the database [ProfileListe]");
-        //Log.i(DEBUG_TAG, "It seems we opened it successfully [ProfileList]");
+        this.setTitle(this.getString(R.string.profile)+": "+String.valueOf(mProfNum));
         mWindow = getWindow();
         mHandler = new SettingHandler(this, mProfNum, mWindow);
+        mHandler.mDbHelper.open();
         mCx = this;
 
         setContentView(R.layout.settings);
+        // This is for the profile name.
+        mProfileName = (TextView) findViewById(R.id.profile_name);
+        mProfileName.setOnClickListener(this);
 
         // This is for the brightness bar.
         mBrightnessLevel = (SeekBar) findViewById(R.id.brightness_setting);
@@ -127,6 +134,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         
         // Our broadcast receivers need this
         mProfileList = this;
+        //Log.i(DEBUG_TAG, "Finished creating... [ProfileList]");
 
         // This is for the GPS button
         //mGps = (ToggleButton) findViewById(R.id.gps);
@@ -146,6 +154,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         //Log.i(DEBUG_TAG, "Trying to resume [ProfileList]");
         mHandler.mDbHelper.open();
 
+        //Log.i(DEBUG_TAG, "Ok, first call to mHandler succeeded [ProfileList]");
         // Check if bluetooth is supported
         int check = mHandler.setSetting(ENUM_BLUETOOTH);
         if (check == -1){
@@ -170,7 +179,14 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         //Log.i(DEBUG_TAG, "Unregistering receiver [ProfileListe]");
         unregisterReceiver(mBluetoothReceiver);
         unregisterReceiver(mWifiReceiver);
+
+        // Try to fix this so that we don't lose the dialog.
+        //Log.i(DEBUG_TAG, "Trying to dismiss the dialog [ProfileList]");
+        if (mDialog instanceof Dialog) {
+            mDialog.dismiss();
+        }
         super.onPause();
+        //finish();
     }
 
     class BluetoothReceiver extends BroadcastReceiver {
@@ -295,8 +311,13 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         updateUI(setting);
     }
 
+    private void updateUI(){
+        for (SettingHandler.SettingsEnum item: SettingHandler.SettingsEnum.values()){
+            updateUI(item);
+        }
+    }
     private void updateUI(SettingHandler.SettingsEnum setting){
-        //Log.i(DEBUG_TAG, "Updating UI [Setting Handler]");
+        //Log.i(DEBUG_TAG, "Updating UI for "+setting+" [Setting Handler]");
         // Now that our settings are retrieved, update the UI.
         switch (setting){
             case BRIGHTNESS:
@@ -324,20 +345,30 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
                 }
                 break;
             case BLUETOOTH:
+                //Log.i(DEBUG_TAG, "Trying to set bluetooth to "+mHandler.getSetting(ENUM_BLUETOOTH) + " [ProfileList]");
                 mBluetooth.setChecked(mHandler.getSetting(ENUM_BLUETOOTH).equals("1"));
+                //Log.i(DEBUG_TAG, "Successful [ProfileList]");
                 mBluetoothReceiver.setBluetoothText();
+                //Log.i(DEBUG_TAG, "also set the text successfully [ProfileList]");
                 break;
             case WIFI:
                 //Log.i(DEBUG_TAG, "Update UI for wifi [ProfileList]");
                 mWifi.setChecked(mHandler.getSetting(ENUM_WIFI).equals("1"));
                 break;
+            case PROFILE_NAME:
+                String text = mHandler.getSetting(SettingHandler.SettingsEnum.PROFILE_NAME);
+                Log.i(DEBUG_TAG, "Setting title to "+text+" [ProfileList]");
+                mProfileName.setText(text);
+                break;
         }
     }
 
     public void onClick(View v){
-        ToggleButton toggleButton; //lets minimize the number of objects we create 
 
         switch (v.getId()){
+            case R.id.profile_name:
+                showDialog(PROFILE_NAME_ID);
+                break;
             case R.id.Popup:
                 // vibrate stuff;
                 showDialog(VIBRATE_DIALOG_ID);
@@ -414,6 +445,15 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
             case R.id.volume_cancel:
                 // TODO consider adding a toast popup here, to tell them their savings weren't changed.
                 mDialog.dismiss();
+                break;
+            case R.id.name_ok:
+
+                EditText profileNameText = (EditText) mDialog.findViewById(R.id.profile_name);
+                String test = profileNameText.getText().toString();
+                mHandler.writeSetting(SettingHandler.SettingsEnum.PROFILE_NAME, test);
+                //Log.i(DEBUG_TAG, "Found "+test+" in edit box [ProfileList]");
+                mDialog.dismiss();
+                updateUI(SettingHandler.SettingsEnum.PROFILE_NAME);
                 break;
 
         }
@@ -537,6 +577,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
     }
 
     public void onProgressChanged(SeekBar s, int level, boolean userInit){
+        //Log.i(DEBUG_TAG, "onProgressChanged is called [ProfileList]");
         String strLevel = String.valueOf(level);
         TextView progress;
         switch(s.getId()){
@@ -554,6 +595,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
                 //Log.i(DEBUG_TAG, "Setting brightness to "+level+" [ProfileList]");
                 // update screen regardless of who changed the slider
                 mHandler.setSetting(ENUM_BRIGHTNESS);
+                //Log.i(DEBUG_TAG, "set successful  [ProfileList]");
                 break;
             case R.id.ringer_volume:
                 progress = (TextView) mDialog.findViewById(R.id.ring_value);

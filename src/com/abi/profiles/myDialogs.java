@@ -8,12 +8,11 @@ import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.Button;
 import android.util.Log;
+import android.widget.EditText;
 
 class myDialogs {
     //private int mId;
     //private ProfileList mpList;
-    private static final int VIBRATE_DIALOG_ID = 1;
-    private static final int VOLUME_DIALOG_ID = 2;
     private static final String DEBUG_TAG = "QuickProfiles";
 
     /*
@@ -31,7 +30,7 @@ class myDialogs {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         switch (mId){
-            case VIBRATE_DIALOG_ID:
+            case ProfileList.VIBRATE_DIALOG_ID:
                 dialog.setContentView(R.layout.vibrate_dialog);
                 dialog.setCancelable(true);
 
@@ -46,7 +45,7 @@ class myDialogs {
                 sndAndVibrate.setOnClickListener(mpList);
 
                 break;
-            case VOLUME_DIALOG_ID:
+            case ProfileList.VOLUME_DIALOG_ID:
                 dialog.setContentView(R.layout.volume_dialog);
                 dialog.setCancelable(false);
 
@@ -140,6 +139,11 @@ class myDialogs {
                 doneButton.setOnClickListener(mpList);
                 cancelButton.setOnClickListener(mpList);
 
+                break;
+            case ProfileList.PROFILE_NAME_ID:
+                dialog.setContentView(R.layout.name_dialog);
+                Button done = (Button) dialog.findViewById(R.id.name_ok);
+                done.setOnClickListener(mpList);
                 break;
         }
         //Log.e(DEBUG_TAG, "Returning a null dialog. This is wrong, FIXME [ProfileList]");

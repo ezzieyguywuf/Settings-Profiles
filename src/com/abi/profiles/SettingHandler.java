@@ -150,6 +150,10 @@ public class SettingHandler{
                 //Log.i(DEBUG_TAG, "Writing "+(value == null ? "0" : value)+" as bind setting [SettingHandler]");
                 writeSetting(SettingsEnum.NOTIFICATION_BIND, value==null ? "0" : value);
                 break;
+            case PROFILE_NAME:
+                value = "<click to set name>";
+                writeSetting(SettingsEnum.PROFILE_NAME, value);
+                break;
         }
         return value;
     }
@@ -165,15 +169,15 @@ public class SettingHandler{
 
         value = getSetting(setting);
 
+        //Log.i(DEBUG_TAG, "Got the value of "+value+" ProfileList]");
         if (value == null){
             value = getDefaults(setting);
         }
         // This is the nitty gritty, where all the settings are actually set.
-        //Log.i(DEBUG_TAG, "Finally [SettingHandler]");
-        if (value.equals("-1")){
+        //if (value.equals("-1")){
             //Log.e(DEBUG_TAG, "The Value is -1!!! This should NEVER happen! FIXME now!!!!");
             //Log.e(DEBUG_TAG, "^ This is for setting" + setting +" [SettingHandler]");
-        }
+        //}
         // so we know when we can change the volume settings
         String vibration;
         String ring;
@@ -420,6 +424,10 @@ public class SettingHandler{
                 //Log.i(DEBUG_TAG, "Writing "+value+" to TITLE [SettingHandler]");
                 mDbHelper.createSetting(mProfNum, mDbHelper.TITLE, value);
                 break;
+            case PROFILE_NAME:
+                Log.i(DEBUG_TAG, "Writing to profile name "+value+" [SettingHandler]");
+                mDbHelper.createSetting(mProfNum, mDbHelper.PROFILE_NAME, value);
+                break;
 
         }
     }
@@ -463,7 +471,10 @@ public class SettingHandler{
                 //Log.i(DEBUG_TAG, "Trying to return setting");
                 //return mDbHelper.fetchSetting(mProfNum, mDbHelper.SHOW_HELP);
             case TITLE:
+                Log.i(DEBUG_TAG, "Returning from title name "+mDbHelper.fetchSetting(mProfNum, mDbHelper.TITLE)+" [SettingHandler]");
                 return mDbHelper.fetchSetting(mProfNum, mDbHelper.TITLE);
+            case PROFILE_NAME:
+                return(mDbHelper.fetchSetting(mProfNum, mDbHelper.PROFILE_NAME));
 
         }
         return "0";
@@ -471,6 +482,10 @@ public class SettingHandler{
 
     public void setProf(int profNum){
         mProfNum = profNum;
+    }
+
+    public int getProf(){
+        return mProfNum;
     }
 
     enum SettingsEnum {
@@ -486,7 +501,8 @@ public class SettingHandler{
         BLUETOOTH,
         NOTIFICATION_BIND,
         WIFI,
-        TITLE
+        TITLE,
+        PROFILE_NAME
         //GPS,
         //SHOW_HELP
     }

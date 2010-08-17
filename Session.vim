@@ -32,6 +32,8 @@ nmap ,cc <Plug>NERDCommenterComment
 map Q gq
 xmap S <Plug>VSurround
 map Y y$
+nmap <silent> \aocom :AlignPush:AlignCtrl g /[*/]\acom:AlignPop
+nmap <silent> \t@ :AlignCtrl mIp1P1=l @:'a,.Align
 map \mbt <Plug>TMiniBufExplorer
 map \mbu <Plug>UMiniBufExplorer
 map \mbc <Plug>CMiniBufExplorer
@@ -76,9 +78,7 @@ vmap <silent> \T, :<BS><BS><BS>ma'>\T,
 vmap <silent> \T| :<BS><BS><BS>ma'>\T|
 map <silent> \tdW@ :AlignCtrl v ^\s*/[/*]:AlignCtrl mWp1P1=l @:'a,.Align
 map <silent> \tW@ :AlignCtrl mWp1P1=l @:'a,.Align
-nmap <silent> \t@ :AlignCtrl mIp1P1=l @:'a,.Align
 omap <silent> \t@ :AlignCtrl mIp1P1=l @:'a,.Align
-nmap <silent> \aocom :AlignPush:AlignCtrl g /[*/]\acom:AlignPop
 omap <silent> \aocom :AlignPush:AlignCtrl g /[*/]\acom:AlignPop
 map \c :echo g:colors_name
 map \p :CP
@@ -92,6 +92,8 @@ nmap ySs <Plug>YSsurround
 nmap yss <Plug>Yssurround
 nmap yS <Plug>YSurround
 nmap ys <Plug>Ysurround
+nmap <SNR>17_WS <Plug>AlignMapsWrapperStart
+nmap <SNR>17_WE <Plug>AlignMapsWrapperEnd
 nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
 nmap <silent> <Plug>NERDCommenterAppend :call NERDComment(0, "append")
 nnoremap <silent> <Plug>NERDCommenterToEOL :call NERDComment(0, "toEOL")
@@ -117,8 +119,8 @@ vnoremap <silent> <Plug>NERDCommenterComment :call NERDComment(1, "norm")
 nnoremap <silent> <Plug>NERDCommenterComment :call NERDComment(0, "norm")
 nmap <silent> <Plug>RestoreWinPosn :call RestoreWinPosn()
 nmap <silent> <Plug>SaveWinPosn :call SaveWinPosn()
-nmap <SNR>17_WE <Plug>AlignMapsWrapperEnd
-nmap <SNR>17_WS <Plug>AlignMapsWrapperStart
+nmap <SNR>18_WE <Plug>AlignMapsWrapperEnd
+nmap <SNR>18_WS <Plug>AlignMapsWrapperStart
 imap S <Plug>ISurround
 imap s <Plug>Isurround
 imap  <Plug>Isurround
@@ -127,7 +129,6 @@ inoremap jk 
 let &cpo=s:cpo_save
 unlet s:cpo_save
 set autoindent
-set background=dark
 set backspace=indent,eol,start
 set cmdheight=2
 set confirm
@@ -163,23 +164,26 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +247 src/com/abi/profiles/ProfileList.java
+badd +498 src/com/abi/profiles/ProfileList.java
 badd +1721 ~/vim/JavaImp/JavaImp.txt
-badd +26 ~/vim/JavaImp/choices.txt
+badd +27 ~/vim/JavaImp/choices.txt
 badd +58 src/com/abi/profiles/ProfilesDbHelper.java
 badd +27 src/com/abi/profiles/myDialogs.java
-badd +27 src/com/abi/profiles/SettingHandler.java
+badd +76 src/com/abi/profiles/SettingHandler.java
 badd +5 AndroidManifest.xml
 badd +17 res/layout/settings.xml
-badd +12 res/values/strings.xml
+badd +15 res/values/strings.xml
 badd +39 res/values/styles.xml
 badd +1 src/com/abi/profiles/Stategy.java
-badd +161 src/com/abi/profiles/Profiles.java
+badd +110 src/com/abi/profiles/Profiles.java
 badd +34 src/com/abi/profiles/HelpDialog.java
 badd +5 res/layout/help_dialog.xml
 badd +15 res/layout/volume_dialog.xml
+badd +37 src/com/abi/profiles/BluetoothHandler.java
+badd +65 src/com/abi/profiles/OldBluetoothHandler.java
+badd +16 res/layout/name_dialog.xml
 silent! argdel *
-edit AndroidManifest.xml
+edit src/com/abi/profiles/HelpDialog.java
 set splitbelow splitright
 wincmd _ | wincmd |
 split
@@ -200,14 +204,15 @@ nnoremap <buffer> 	 :call search('\[[0-9]*:[^\]]*\]'):<BS>
 nnoremap <buffer> j gj
 nnoremap <buffer> k gk
 nnoremap <buffer> p :wincmd p:<BS>
-nnoremap <buffer> <S-Tab> :call search('\[[0-9]*:[^\]]*\]','b'):<BS>
-nnoremap <buffer> <Up> gk
 nnoremap <buffer> <Down> gj
+nnoremap <buffer> <Up> gk
+nnoremap <buffer> <S-Tab> :call search('\[[0-9]*:[^\]]*\]','b'):<BS>
 let &cpo=s:cpo_save
 unlet s:cpo_save
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
+setlocal balloonexpr=
 setlocal nobinary
 setlocal bufhidden=delete
 setlocal nobuflisted
@@ -303,29 +308,31 @@ argglobal
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
+setlocal balloonexpr=
 setlocal nobinary
 setlocal bufhidden=
 setlocal buflisted
 setlocal buftype=
-setlocal nocindent
+setlocal cindent
 setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
-setlocal cinoptions=
+setlocal cinoptions=j1
 setlocal cinwords=if,else,while,do,for,switch
-setlocal comments=s:<!--,m:\ \ \ \ \ ,e:-->
-setlocal commentstring=<!--%s-->
+setlocal comments=sO:*\ -,mO:*\ \ ,exO:*/,s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
+setlocal commentstring=//%s
 setlocal complete=.,w,b,u,t,i
 setlocal completefunc=
 setlocal nocopyindent
 setlocal nocursorcolumn
-setlocal nocursorline
+set cursorline
+setlocal cursorline
 setlocal define=
 setlocal dictionary=
 setlocal nodiff
 setlocal equalprg=
 setlocal errorformat=
 setlocal expandtab
-if &filetype != 'xml'
-setlocal filetype=xml
+if &filetype != 'java'
+setlocal filetype=java
 endif
 setlocal foldcolumn=0
 setlocal foldenable
@@ -341,12 +348,12 @@ setlocal formatexpr=
 setlocal formatoptions=tcq
 setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
 setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=0
+setlocal iminsert=2
+setlocal imsearch=2
 setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=XmlIndentGet(v:lnum,1)
-setlocal indentkeys=o,O,*<Return>,<>>,<<>,/,{,}
+setlocal includeexpr=substitute(v:fname,'\\.','/','g')
+setlocal indentexpr=GetJavaIndent()
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e,0=extends,0=implements
 setlocal noinfercase
 setlocal iskeyword=@,48-57,_,192-255
 setlocal keywordprg=
@@ -361,7 +368,7 @@ setlocal nrformats=octal,hex
 set number
 setlocal number
 setlocal numberwidth=4
-setlocal omnifunc=xmlcomplete#CompleteTags
+setlocal omnifunc=
 setlocal path=
 setlocal nopreserveindent
 setlocal nopreviewwindow
@@ -379,11 +386,11 @@ setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
 setlocal statusline=
-setlocal suffixesadd=
+setlocal suffixesadd=.java
 setlocal swapfile
 setlocal synmaxcol=3000
-if &syntax != 'xml'
-setlocal syntax=xml
+if &syntax != 'java'
+setlocal syntax=java
 endif
 setlocal tabstop=8
 setlocal tags=
@@ -394,12 +401,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 5 - ((4 * winheight(0) + 29) / 58)
+let s:l = 34 - ((33 * winheight(0) + 29) / 58)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-5
-normal! 031l
+34
+normal! 08l
 wincmd w
 2wincmd w
 exe '1resize ' . ((&lines * 2 + 32) / 64)
