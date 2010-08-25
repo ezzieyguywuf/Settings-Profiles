@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.abi.profiles"
-      android:versionCode="8"
-      android:versionName="1.3.1">
+      android:versionCode="9"
+      android:versionName="1.4.0">
       <uses-sdk android:minSdkVersion="3" />
       <application android:label="@string/app_name"
           android:icon="@drawable/profile_icon">
@@ -16,7 +16,15 @@
           <activity android:name=".SettingStore"/>
           <activity android:name=".ProfileList"/>
           <activity android:name=".HelpDialog"/>
+          <activity android:name=".BlankActivity" android:theme="@android:style/Theme.Dialog"/>
           <activity android:name="com.bwx.bequick.MainSettingsActivity"/>
+          <receiver android:name=".MyWidgetProvider" android:label="My Widget">
+              <intent-filter>
+                  <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+              </intent-filter>
+              <meta-data android:name="android.appwidget.provider"
+                  android:resource="@xml/my_widget_info"/>
+          </receiver>
       </application>
       <uses-permission android:name="android.permission.WRITE_SETTINGS" />
       <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -24,4 +32,5 @@
       <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
       <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
       <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
 </manifest> 

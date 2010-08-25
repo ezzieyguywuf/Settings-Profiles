@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
+<LinearLayout 
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
@@ -13,34 +16,20 @@
         android:layout_height="fill_parent">
 
     <Button android:id="@+id/Profile1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center"
+            style="@style/main_buttons"
             android:text="@string/Profile1"/>
     <Button android:id="@+id/Profile2"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center"
+            style="@style/main_buttons"
             android:text="@string/Profile2"/>
     <Button android:id="@+id/Profile3"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center"
+            style="@style/main_buttons"
             android:text="@string/Profile3"/>
     <Button android:id="@+id/Profile4"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center"
+            style="@style/main_buttons"
             android:text="@string/Profile4"/>
     <Button android:id="@+id/Profile5"
-           android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center"
+            style="@style/main_buttons"
             android:text="@string/Profile5"/>
     </LinearLayout>
 </LinearLayout>
+</ScrollView>

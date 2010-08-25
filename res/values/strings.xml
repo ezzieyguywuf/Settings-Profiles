@@ -13,6 +13,7 @@
 
     <string name="ok">Ok</string>
     <string name="profile_name">Profile Name: </string>
+    <string name="click_to_edit">[edit to set value]</string>
 
     <string name="brightness">Brightness</string>
     <string name="ringer">Ringer</string>

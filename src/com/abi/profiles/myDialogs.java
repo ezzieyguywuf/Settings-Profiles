@@ -23,7 +23,7 @@ class myDialogs {
      */
 
     public Dialog createDialog(ProfileList cx, int mId) {
-        //Log.i(DEBUG_TAG, "creating dialog [myDialogs]");
+        Log.i(DEBUG_TAG, "creating dialog [myDialogs]");
         ProfileList mpList;
         mpList = cx;
         Dialog dialog = new Dialog(mpList);
@@ -49,7 +49,7 @@ class myDialogs {
                 dialog.setContentView(R.layout.volume_dialog);
                 dialog.setCancelable(false);
 
-                //Log.i(DEBUG_TAG, "Creating the volume dialog [ProfileList]");
+                Log.i(DEBUG_TAG, "Creating the volume dialog [ProfileList]");
                 // This is the listener for the check box
                 CheckBox notifBind = (CheckBox) dialog.findViewById(R.id.notification_bind);
                 int checked = Integer.valueOf(ProfileList.mHandler.getSetting(ProfileList.ENUM_NOTIFICATION_BIND));
@@ -146,7 +146,7 @@ class myDialogs {
                 done.setOnClickListener(mpList);
                 break;
         }
-        //Log.e(DEBUG_TAG, "Returning a null dialog. This is wrong, FIXME [ProfileList]");
+        if (dialog == null){Log.e(DEBUG_TAG, "Returning a null dialog. This is wrong, FIXME [ProfileList]");}
         return dialog;
     }
 }

@@ -46,7 +46,6 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
 
     static int mProfNum=-1;
     public static SettingHandler mHandler;
-    static Window mWindow;
     static Context mCx;
 
     private static final String DEBUG_TAG = "QuickProfiles";
@@ -84,11 +83,12 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        //Log.i(DEBUG_TAG, "onCreate is called [ProfileList]");
+        Log.i(DEBUG_TAG, "onCreate is called [ProfileList]");
         Bundle extras = getIntent().getExtras();
 
         // Find out which profile we're dealing with. 
         mProfNum = extras.getInt(Profiles.EXTRA_KEY);
+        Log.i(DEBUG_TAG, "Retrieved "+mProfNum+" as profile number [ProfileList]");
         // If we weren't passed the Prof Num, get it from the savedInstanceState
         if (mProfNum==0){
             Log.i(DEBUG_TAG, "Trying to read profNum... [ProfileList]");
@@ -97,8 +97,8 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         }
 
         this.setTitle(this.getString(R.string.profile)+": "+String.valueOf(mProfNum));
-        mWindow = getWindow();
-        mHandler = new SettingHandler(this, mProfNum, mWindow);
+        mHandler = new SettingHandler(this, mProfNum);
+        mHandler.mWindow = getWindow();
         mHandler.mDbHelper.open();
         mCx = this;
 
@@ -151,10 +151,10 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
     @Override
     public void onResume(){
         super.onResume();
-        //Log.i(DEBUG_TAG, "Trying to resume [ProfileList]");
+        Log.i(DEBUG_TAG, "Trying to resume [ProfileList]");
         mHandler.mDbHelper.open();
 
-        //Log.i(DEBUG_TAG, "Ok, first call to mHandler succeeded [ProfileList]");
+        Log.i(DEBUG_TAG, "Ok, first call to mHandler succeeded [ProfileList]");
         // Check if bluetooth is supported
         int check = mHandler.setSetting(ENUM_BLUETOOTH);
         if (check == -1){
@@ -169,8 +169,9 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         IntentFilter wifiChanged = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
         registerReceiver(mWifiReceiver, wifiChanged);
 
-        loadSettings();
-        //Log.i(DEBUG_TAG, "Success [ProfileList]");
+        mHandler.setProfile();
+        updateUI();
+        Log.i(DEBUG_TAG, "Success [ProfileList]");
     }
 
     @Override
@@ -291,8 +292,6 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
         }
     }
 
-
-
     private void loadSettings(){
         // Now go ahead and set all the settings to what our stored
         // values are.
@@ -357,8 +356,12 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
                 break;
             case PROFILE_NAME:
                 String text = mHandler.getSetting(SettingHandler.SettingsEnum.PROFILE_NAME);
-                Log.i(DEBUG_TAG, "Setting title to "+text+" [ProfileList]");
-                mProfileName.setText(text);
+                if (text.equals("-1")){
+                    mProfileName.setText(R.string.click_to_edit);
+                }
+                else {
+                    mProfileName.setText(text);
+                }
                 break;
         }
     }
@@ -376,25 +379,29 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
             case R.id.silent:
                 //Log.i(DEBUG_TAG, "Set Silent [ProfileList]");
                 mHandler.writeSetting(ENUM_VIBRATE, "0");
-                loadSettings(ENUM_VIBRATE);
+                mHandler.setProfile(ENUM_VIBRATE);
+                updateUI(ENUM_VIBRATE);
                 mDialog.dismiss();
                 break;
             case R.id.vibration_only:
                 //Log.i(DEBUG_TAG, "Set vibration_only [ProfileList]");
                 mHandler.writeSetting(ENUM_VIBRATE, "1");
-                loadSettings(ENUM_VIBRATE);
+                mHandler.setProfile(ENUM_VIBRATE);
+                updateUI(ENUM_VIBRATE);
                 mDialog.dismiss();
                 break;
             case R.id.sound_only:
                 //Log.i(DEBUG_TAG, "Set sound_only [ProfileList]");
                 mHandler.writeSetting(ENUM_VIBRATE, "2");
-                loadSettings(ENUM_VIBRATE);
+                mHandler.setProfile(ENUM_VIBRATE);
+                updateUI(ENUM_VIBRATE);
                 mDialog.dismiss();
                 break;
             case R.id.sound_and_vibration:
                 //Log.i(DEBUG_TAG, "Set sound_and_vibration [ProfileList]");
                 mHandler.writeSetting(ENUM_VIBRATE, "3");
-                loadSettings(ENUM_VIBRATE);
+                mHandler.setProfile(ENUM_VIBRATE);
+                updateUI(ENUM_VIBRATE);
                 mDialog.dismiss();
                 break;
             case R.id.volume_popup:
@@ -409,35 +416,35 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
                     temp = (SeekBar) mDialog.findViewById(R.id.ringer_volume);
                     value = (String) String.valueOf(temp.getProgress());
                     mHandler.writeSetting(ENUM_RINGER_VOLUME, value);
-                    loadSettings(ENUM_RINGER_VOLUME);
+                    mHandler.setProfile(ENUM_RINGER_VOLUME);
 
                     temp = (SeekBar) mDialog.findViewById(R.id.notification_volume);
                     value = (String) String.valueOf(temp.getProgress());
                     mHandler.writeSetting(ENUM_NOTIFICATION_VOLUME, value);
-                    loadSettings(ENUM_NOTIFICATION_VOLUME);
+                    mHandler.setProfile(ENUM_NOTIFICATION_VOLUME);
 
                     temp = (SeekBar) mDialog.findViewById(R.id.media_volume);
                     value = (String) String.valueOf(temp.getProgress());
                     mHandler.writeSetting(ENUM_MEDIA_VOLUME, value);
-                    loadSettings(ENUM_MEDIA_VOLUME);
+                    mHandler.setProfile(ENUM_MEDIA_VOLUME);
 
                     temp = (SeekBar) mDialog.findViewById(R.id.alarm_volume);
                     value = (String) String.valueOf(temp.getProgress());
                     mHandler.writeSetting(ENUM_ALARM_VOLUME, value);
-                    loadSettings(ENUM_ALARM_VOLUME);
+                    mHandler.setProfile(ENUM_ALARM_VOLUME);
 
                     temp = (SeekBar) mDialog.findViewById(R.id.voice_call_volume);
                     value = (String) String.valueOf(temp.getProgress());
                     mHandler.writeSetting(ENUM_VOICE_VOLUME, value);
-                    loadSettings(ENUM_VOICE_VOLUME);
+                    mHandler.setProfile(ENUM_VOICE_VOLUME);
 
                     temp = (SeekBar) mDialog.findViewById(R.id.system_volume);
                     value = (String) String.valueOf(temp.getProgress());
                     //Log.i(DEBUG_TAG, "writing "+value+" for system volume [ProfileList]");
                     mHandler.writeSetting(ENUM_SYSTEM_VOLUME, value);
-                    loadSettings(ENUM_SYSTEM_VOLUME);
+                    mHandler.setProfile(ENUM_SYSTEM_VOLUME);
 
-                    loadSettings(ENUM_NOTIFICATION_BIND);
+                    mHandler.setProfile(ENUM_NOTIFICATION_BIND);
 
                 }
                     mDialog.dismiss();
@@ -450,8 +457,8 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
 
                 EditText profileNameText = (EditText) mDialog.findViewById(R.id.profile_name);
                 String test = profileNameText.getText().toString();
+                Log.i(DEBUG_TAG, "Setting profile name for profile number "+mHandler.getProf()+" [ProfileList]");
                 mHandler.writeSetting(SettingHandler.SettingsEnum.PROFILE_NAME, test);
-                //Log.i(DEBUG_TAG, "Found "+test+" in edit box [ProfileList]");
                 mDialog.dismiss();
                 updateUI(SettingHandler.SettingsEnum.PROFILE_NAME);
                 break;
@@ -481,8 +488,8 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
                 else {
                     mHandler.writeSetting(ENUM_RINGER, "0");
                 }
-                loadSettings(ENUM_RINGER);
-                loadSettings(ENUM_VIBRATE);
+                mHandler.setProfile(ENUM_RINGER);
+                mHandler.setProfile(ENUM_VIBRATE);
                 break;
             case R.id.bluetooth:
                 //Log.i(DEBUG_TAG, "Responding to bluetooth button click [ProfileList]");
@@ -494,7 +501,8 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
                     //Log.i(DEBUG_TAG, "Writing 0 [ProfileList]");
                     mHandler.writeSetting(ENUM_BLUETOOTH, "0");
                 }
-                loadSettings(ENUM_BLUETOOTH);
+                mHandler.setProfile(ENUM_BLUETOOTH);
+                updateUI(ENUM_BLUETOOTH);
                 //Log.i(DEBUG_TAG, "Breaking [ProfileList]");
                 break;
             case R.id.wifi:
@@ -507,7 +515,8 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
                     //Log.i(DEBUG_TAG, "Button is not clicked [ProfileList]");
                     mHandler.writeSetting(ENUM_WIFI,"0");
                 }
-                loadSettings(ENUM_WIFI);
+                mHandler.setProfile(ENUM_WIFI);
+                updateUI(ENUM_WIFI);
                 break;
             /*
              *case R.id.gps:
@@ -517,7 +526,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
              *    else {
              *        mHandler.writeSetting(ENUM_GPS, "0");
              *    }
-             *    loadSettings(ENUM_GPS);
+             *    mHandler.setProfile(ENUM_GPS);
              *    break;
              */
         }
@@ -540,12 +549,12 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
             case VOLUME_DIALOG_ID:
                 // update dialog with set values
                 SeekBar tempSeekBar;
-                loadSettings(ENUM_RINGER_VOLUME);
-                loadSettings(ENUM_NOTIFICATION_VOLUME);
-                loadSettings(ENUM_MEDIA_VOLUME);
-                loadSettings(ENUM_ALARM_VOLUME);
-                loadSettings(ENUM_VOICE_VOLUME);
-                loadSettings(ENUM_SYSTEM_VOLUME);
+                mHandler.setProfile(ENUM_RINGER_VOLUME);
+                mHandler.setProfile(ENUM_NOTIFICATION_VOLUME);
+                mHandler.setProfile(ENUM_MEDIA_VOLUME);
+                mHandler.setProfile(ENUM_ALARM_VOLUME);
+                mHandler.setProfile(ENUM_VOICE_VOLUME);
+                mHandler.setProfile(ENUM_SYSTEM_VOLUME);
 
                 String notification_bind = mHandler.getSetting(ENUM_NOTIFICATION_BIND);
 

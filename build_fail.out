@@ -12,11 +12,9 @@ Buildfile: /home/wolfie/Program/Android/Profiles/build.xml
 
 -resource-src:
      [echo] Generating R.java / Manifest.java from the resources...
-     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/values/.strings.xml.swp')
-     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/values/.styles.xml.swp')
-     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.profile_list.xml.swp')
-     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.settings.xml.swp')
-     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.name_dialog.xml.swp')
+     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.widget.xml.swp')
+     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.widget.xml.swo')
+     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/xml/.my_widget_info.xml.swp')
 
 -aidl:
      [echo] Compiling aidl files into Java classes...
@@ -32,11 +30,9 @@ compile:
 -package-resources:
      [echo] Packaging resources
  [aaptexec] Creating full resource package...
-     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/values/.strings.xml.swp')
-     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/values/.styles.xml.swp')
-     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.profile_list.xml.swp')
-     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.settings.xml.swp')
-     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.name_dialog.xml.swp')
+     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.widget.xml.swp')
+     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.widget.xml.swo')
+     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/xml/.my_widget_info.xml.swp')
 
 -package-debug-sign:
 [apkbuilder] Creating Profiles-debug-unaligned.apk and signing it with a debug key...
@@ -47,4 +43,4 @@ debug:
      [echo] Debug Package: /home/wolfie/Program/Android/Profiles/bin/Profiles-debug.apk
 
 BUILD SUCCESSFUL
-Total time: 7 seconds
+Total time: 6 seconds

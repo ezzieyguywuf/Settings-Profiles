@@ -20,11 +20,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public class SettingHandler{
+    // TODO Make this class a singleton. 
     private Context mCx;
     private static ContentResolver mCr;
     private int mProfNum;
     public static ProfilesDbHelper mDbHelper;
-    private static Window mWindow;
+    public static Window mWindow;
     private static final int NUMBER_OF_SETTINGS = 5;
 
     //private static final SettingsEnum ALL_SETTINGS;
@@ -48,12 +49,11 @@ public class SettingHandler{
 
     public static AudioManager mAudioManager;
 
-    public SettingHandler(Context cx, int profNum, Window window){
+    public SettingHandler(Context cx, int profNum){
         mCx = cx;
         mCr = mCx.getContentResolver();
         mProfNum = profNum;
         mDbHelper = new ProfilesDbHelper(mCx);
-        mWindow = window;
         mAudioManager = (AudioManager) mCx.getSystemService(mCx.AUDIO_SERVICE);
 
         if (mAudioManager == null) {
@@ -151,11 +151,22 @@ public class SettingHandler{
                 writeSetting(SettingsEnum.NOTIFICATION_BIND, value==null ? "0" : value);
                 break;
             case PROFILE_NAME:
-                value = "<click to set name>";
+                value = "-1";
                 writeSetting(SettingsEnum.PROFILE_NAME, value);
                 break;
         }
         return value;
+    }
+
+    public void setProfile(){
+        for (SettingsEnum item: SettingsEnum.values()){
+            if (item == SettingsEnum.TITLE) continue;
+            setSetting(item);
+        }
+    }
+
+    public void setProfile(SettingsEnum setting){
+        setSetting(setting);
     }
 
     public int setSetting(SettingsEnum setting){
@@ -186,10 +197,12 @@ public class SettingHandler{
         switch(setting){
             case BRIGHTNESS:
                 System.putString(mCr, System.SCREEN_BRIGHTNESS, value);
-                WindowManager.LayoutParams lp = mWindow.getAttributes();
-                //Log.i(DEBUG_TAG, "Setting brightness to "+(Integer.valueOf(value) )+" [SettingHandler]");
-                lp.screenBrightness = Integer.valueOf(value) / 255.0f;
-                mWindow.setAttributes(lp);
+                if (mWindow instanceof Window){
+                    WindowManager.LayoutParams lp = mWindow.getAttributes();
+                    Log.i(DEBUG_TAG, "Setting brightness to "+(Integer.valueOf(value) )+" [SettingHandler]");
+                    lp.screenBrightness = Integer.valueOf(value) / 255.0f;
+                    mWindow.setAttributes(lp);
+                }
                 break;
             case RINGER:
                 if (value.equals("0")){
@@ -305,14 +318,14 @@ public class SettingHandler{
                         case 0:
                             //Log.i(DEBUG_TAG, "Trying to disable [SettingHandler]");
                             success = btAdapter.disable();
-                            if (success) Log.i(DEBUG_TAG, "Success [SettingHandler]");
-                            else Log.i(DEBUG_TAG, "Fail [SettingHandler]");
+                            //if (success) Log.i(DEBUG_TAG, "Success [SettingHandler]");
+                            //else Log.i(DEBUG_TAG, "Fail [SettingHandler]");
                             break;
                         case 1:
                             //Log.i(DEBUG_TAG, "Trying to enable [SettingHandler]");
                             success = btAdapter.enable();
-                            if (success) Log.i(DEBUG_TAG, "Success [SettingHandler]");
-                            else Log.i(DEBUG_TAG, "Fail [SettingHandler]");
+                            //if (success) Log.i(DEBUG_TAG, "Success [SettingHandler]");
+                            //else Log.i(DEBUG_TAG, "Fail [SettingHandler]");
                             break;
                     }
                 }
@@ -471,7 +484,7 @@ public class SettingHandler{
                 //Log.i(DEBUG_TAG, "Trying to return setting");
                 //return mDbHelper.fetchSetting(mProfNum, mDbHelper.SHOW_HELP);
             case TITLE:
-                Log.i(DEBUG_TAG, "Returning from title name "+mDbHelper.fetchSetting(mProfNum, mDbHelper.TITLE)+" [SettingHandler]");
+                //Log.i(DEBUG_TAG, "Returning from title name "+mDbHelper.fetchSetting(mProfNum, mDbHelper.TITLE)+" [SettingHandler]");
                 return mDbHelper.fetchSetting(mProfNum, mDbHelper.TITLE);
             case PROFILE_NAME:
                 return(mDbHelper.fetchSetting(mProfNum, mDbHelper.PROFILE_NAME));

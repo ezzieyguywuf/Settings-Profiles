@@ -19,29 +19,34 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.app.Dialog;
 import android.os.Parcelable;
+import android.net.Uri;
 
 public class Profiles extends Activity implements OnClickListener, OnLongClickListener {
     //public static final int INSERT_ID = Menu.FIRST;
     private static final String DEBUG_TAG = "QuickProfiles";
     private static SettingHandler mSettingHandler;
-    private static SettingHandler titleHandler;
-    private static Window mCurrentWindow;
+    private static SettingHandler mHandler;
     private static Button mProfile1;
     private static Button mProfile2;
     private static Button mProfile3;
     private static Button mProfile4;
     private static Button mProfile5;
 
-    public static final String EXTRA_KEY = "com.abi.profiles";
+    public static final String EXTRA_KEY = "com.abi.profiles.extra";
+    
+    public static final String WIDGET_INTENT = "com.abi.profiles.WidgetAction";
+    public static final String WIDGET_EXTRA_KEY = "com.abi.profiles.WidgetExtra";
+
 
     private static final int HELP_DIALOG_ID = 1;
+    public static final int NUMBER_OF_PROFILES = 5;
 
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //Log.i(DEBUG_TAG, "Trying to set content view [Profiles]");
+        //Log.i(DEBUG_TAG, "Trying to set content view widget should work [Profiles]");
         setContentView(R.layout.profile_list);
 
 /*
@@ -60,21 +65,27 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
  *        }
  */
         // This stuff is  for the Launcher shortcut stuff.
-        final Intent intent = getIntent();
-        final String action = intent.getAction();
+        /*
+         *final Intent intent = getIntent();
+         *final String action = intent.getAction();
+         */
 
         // If the intent is a request to create a shortcut, we'll do that and exit
 
-        if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
-            setupShortcut();
-            finish();
-            return;
-        }
-
-        if (Intent.EXTRA_SHORTCUT_INTENT.equals(action)){
-            setProfile(savedInstanceState.getInt(EXTRA_KEY));
-        }
+/*
+ *        Log.i(DEBUG_TAG, "Main activity called [Profiles]");
+ *        if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
+ *            setupShortcut();
+ *            finish();
+ *            return;
+ *        }
+ *
+ *        if (Intent.EXTRA_SHORTCUT_INTENT.equals(action)){
+ *            setProfile(savedInstanceState.getInt(EXTRA_KEY));
+ *        }
+ */
         // End Launcher shortcut stuff
+        
 
         // Set up all our button listeners
         mProfile1 = (Button) findViewById(R.id.Profile1);
@@ -83,6 +94,9 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         mProfile4 = (Button) findViewById(R.id.Profile4);
         mProfile5 = (Button) findViewById(R.id.Profile5);
 
+
+
+        // set our click listeners
         mProfile1.setOnClickListener(this);
         mProfile1.setOnLongClickListener(this);
         mProfile2.setOnClickListener(this);
@@ -98,18 +112,18 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
     }
 
     public void onResume(){
-        //Log.i(DEBUG_TAG, "Resuming [ProfileList]");
         super.onResume();
-        mCurrentWindow = getWindow();
-        //Log.i(DEBUG_TAG, "Creating titleHandler [Profiles]");
-        titleHandler = new SettingHandler(this, 0, mCurrentWindow);
-        //Log.i(DEBUG_TAG, "Opening its DB [Profiles]");
-        titleHandler.mDbHelper.open();
+        Log.i(DEBUG_TAG, "Trying to resume [Profiles]");
 
-        String profString = titleHandler.getSetting(SettingHandler.SettingsEnum.TITLE) ;
+        // set our button text values
+        mHandler = new SettingHandler(this, 0);
+        mHandler.mWindow = getWindow();
+        mHandler.mDbHelper.open();
+        setProfileNames();
 
-        //Log.i(DEBUG_TAG, "Closing its DB [Profiles]");
-        titleHandler.mDbHelper.close();
+        mHandler.setProf(0);
+        String profString = mHandler.getSetting(SettingHandler.SettingsEnum.TITLE) ;
+        mHandler.mDbHelper.close();
 
         //Log.i(DEBUG_TAG, "Trying to set pressed "+profString+" [Profiles]");
         int profile = profString==null ? 0: Integer.valueOf(profString);
@@ -158,6 +172,39 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
                 break;
         }
     }
+
+    private void setProfileNames(){
+        //Log.i(DEBUG_TAG, "Setting profile names [Profiles]");
+        for (int profile =1; profile <= NUMBER_OF_PROFILES; profile++){
+            mHandler.setProf(profile);
+            String text = mHandler.getSetting(SettingHandler.SettingsEnum.PROFILE_NAME);
+            if (text == null){
+                mHandler.setSetting(SettingHandler.SettingsEnum.PROFILE_NAME);
+                text = mHandler.getSetting(SettingHandler.SettingsEnum.PROFILE_NAME);
+            }
+            // TODO fix this code to allow for any number of profiles
+            if (!text.equals("-1")){
+                switch(profile){
+                    case 1:
+                        mProfile1.setText(text);
+                        break;
+                    case 2:
+                        mProfile2.setText(text);
+                        break;
+                    case 3:
+                        mProfile3.setText(text);
+                        break;
+                    case 4:
+                        mProfile4.setText(text);
+                        break;
+                    case 5:
+                        mProfile5.setText(text);
+                        break;
+                }
+            }
+        }
+        //Log.i(DEBUG_TAG, "Finished doing that [Profiles]");
+    }
     /*
      *@Override
      *public boolean onCreateOptionsMenu(Menu menu) {
@@ -171,90 +218,66 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
 
         switch (v.getId()){
             case R.id.Profile1:
-                mProfile1.setPressed(true);
-                mProfile2.setPressed(false);
-                mProfile3.setPressed(false);
-                mProfile4.setPressed(false);
-                mProfile5.setPressed(false);
                 profNum = 1;
                 break;
             case R.id.Profile2:
-                mProfile1.setPressed(false);
-                mProfile2.setPressed(true);
-                mProfile3.setPressed(false);
-                mProfile4.setPressed(false);
-                mProfile5.setPressed(false);
                 profNum = 2;
                 break;
             case R.id.Profile3:
-                mProfile1.setPressed(false);
-                mProfile2.setPressed(false);
-                mProfile3.setPressed(true);
-                mProfile4.setPressed(false);
-                mProfile5.setPressed(false);
                 profNum = 3;
                 break;
             case R.id.Profile4:
-                mProfile1.setPressed(false);
-                mProfile2.setPressed(false);
-                mProfile3.setPressed(false);
-                mProfile4.setPressed(true);
-                mProfile5.setPressed(false);
                 profNum = 4;
                 break;
             case R.id.Profile5:
-                mProfile1.setPressed(false);
-                mProfile2.setPressed(false);
-                mProfile3.setPressed(false);
-                mProfile4.setPressed(false);
-                mProfile5.setPressed(true);
                 profNum = 5;
                 break;
         }
-        setProfile(profNum);
-    }
-    public void setProfile( int profNum) {
-        //Log.i(DEBUG_TAG, "Trying to set profile [ProfileList]");
 
-        mSettingHandler = new SettingHandler(this, profNum, mCurrentWindow);
-        mSettingHandler.mDbHelper.open();
+        mHandler.mDbHelper.open();
 
-        //Log.i(DEBUG_TAG, "Trying to write "+String.valueOf(profNum)+" [Profiles]");
-        titleHandler.writeSetting(SettingHandler.SettingsEnum.TITLE, String.valueOf(profNum));
+        // first set our TITLE value, so we know which profile is set.
+        // this corresponds to profile 0.
+        mHandler.setProf(0);
+        mHandler.writeSetting(SettingHandler.SettingsEnum.TITLE, String.valueOf(profNum));
 
-        for (SettingHandler.SettingsEnum item: SettingHandler.SettingsEnum.values()){
-            //Log.i(DEBUG_TAG, "Loading the setting for "+item+" [ProfileList]");
-            if (item == SettingHandler.SettingsEnum.TITLE) continue;
-            mSettingHandler.setSetting(item);
-        }
-        mSettingHandler.mDbHelper.close();
+        // now set all our setting values
+        mHandler.setProf(profNum);
+        mHandler.setProfile();
+
+        mHandler.mDbHelper.close();
         finish();
     }
     
     public boolean onLongClick(View v) {
         Intent i = new Intent(this,ProfileList.class);
+        int profNum = 0;
         switch (v.getId()) {
-            case R.id.Profile1:{
+            case R.id.Profile1:
                 i.putExtra(EXTRA_KEY,1);
+                profNum = 1;
                 break;
-            }
-            case R.id.Profile2:{
+            case R.id.Profile2:
                 i.putExtra(EXTRA_KEY,2);
+                profNum = 2;
                 break;
-            }
-            case R.id.Profile3:{
+            case R.id.Profile3:
                 i.putExtra(EXTRA_KEY,3);
+                profNum = 3;
                 break;
-            }
-            case R.id.Profile4:{
+            case R.id.Profile4:
                 i.putExtra(EXTRA_KEY,4);
+                profNum = 4;
                 break;
-            }
-            case R.id.Profile5:{
+            case R.id.Profile5:
                 i.putExtra(EXTRA_KEY,5);
+                profNum = 5;
                 break;
-            }
         }
+
+        mHandler.mDbHelper.open();
+        mHandler.writeSetting(SettingHandler.SettingsEnum.TITLE, String.valueOf(profNum));
+        mHandler.mDbHelper.close();
         startActivity(i);
         return true;
     }
@@ -277,23 +300,25 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
      *    return dialog;
      *}
      */
-    public void setupShortcut(){
-        //Log.i(DEBUG_TAG, "trying to setup shortcut [ProfileList]");
-        Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
-        shortcutIntent.setClassName(this, this.getClass().getName());
-        shortcutIntent.putExtra(EXTRA_KEY, 1);
-
-        // Then, set up the container intent (the response to the caller)
-
-        Intent intent = new Intent();
-        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.shortcut_name));
-        Parcelable iconResource = Intent.ShortcutIconResource.fromContext(
-                this,  R.drawable.app_sample_code);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
-
-        // Now, return the result to the launcher
-
-        setResult(RESULT_OK, intent);
-    }
+/*
+ *    public void setupShortcut(){
+ *        //Log.i(DEBUG_TAG, "trying to setup shortcut [ProfileList]");
+ *        Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
+ *        shortcutIntent.setClassName(this, this.getClass().getName());
+ *        shortcutIntent.putExtra(EXTRA_KEY, 1);
+ *
+ *        // Then, set up the container intent (the response to the caller)
+ *
+ *        Intent intent = new Intent();
+ *        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+ *        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.shortcut_name));
+ *        Parcelable iconResource = Intent.ShortcutIconResource.fromContext(
+ *                this,  R.drawable.app_sample_code);
+ *        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
+ *
+ *        // Now, return the result to the launcher
+ *
+ *        setResult(RESULT_OK, intent);
+ *    }
+ */
 }
