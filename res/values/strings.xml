@@ -56,4 +56,7 @@
     <string name="help_check_text">Please check here if you do not want to see this dialog again</string>
 
     <string name="shortcut_name">Example</string>
+
+    <string name="missing_license">It appears that you have not yet purchased the license for this widget. You will need to do so in order to have the widget actually change your settings. You can search for the license on the market, or simply click on the button below and I will perform the search for you. The widget currently costs $0.99. </string>
+    <string name="perform_search">Perform\nSearch</string>
 </resources>

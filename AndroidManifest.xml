@@ -21,6 +21,14 @@
           <receiver android:name=".MyWidgetProvider" android:label="My Widget">
               <intent-filter>
                   <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                  <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                  <action android:name="com.abi.profiles.LicenseBroadcast"/>
+              </intent-filter>
+              <intent-filter>
+                  <action android:name="android.intent.action.PACKAGE_ADDED" />
+                  <action android:name="android.intent.action.PACKAGE_CHANGED" />
+                  <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                  <data android:scheme="package" />
               </intent-filter>
               <meta-data android:name="android.appwidget.provider"
                   android:resource="@xml/my_widget_info"/>

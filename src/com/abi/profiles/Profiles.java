@@ -46,46 +46,8 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //Log.i(DEBUG_TAG, "Trying to set content view widget should work [Profiles]");
+        Log.i(DEBUG_TAG, "Trying to set content view widget should work [Profiles]");
         setContentView(R.layout.profile_list);
-
-/*
- *        mCurrentWindow = getWindow();
- *        mSettingHandler = new SettingHandler(this, 0, mCurrentWindow);
- *
- *        Integer helpDialog = (mSettingHandler.getSetting(SettingHandler.SettingsEnum.SHOW_HELP)==null ? 0: 1);
- *        Log.i(DEBUG_TAG, "Checking helpDialog [Profiles]");
- *        if (helpDialog == 0){
- *            // show help dialog
- *            Log.i(DEBUG_TAG, "Firing dialog [Profiles]");
- *            showDialog(HELP_DIALOG_ID);
- *        }
- *        else {
- *            // don't show it
- *        }
- */
-        // This stuff is  for the Launcher shortcut stuff.
-        /*
-         *final Intent intent = getIntent();
-         *final String action = intent.getAction();
-         */
-
-        // If the intent is a request to create a shortcut, we'll do that and exit
-
-/*
- *        Log.i(DEBUG_TAG, "Main activity called [Profiles]");
- *        if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
- *            setupShortcut();
- *            finish();
- *            return;
- *        }
- *
- *        if (Intent.EXTRA_SHORTCUT_INTENT.equals(action)){
- *            setProfile(savedInstanceState.getInt(EXTRA_KEY));
- *        }
- */
-        // End Launcher shortcut stuff
-        
 
         // Set up all our button listeners
         mProfile1 = (Button) findViewById(R.id.Profile1);
@@ -205,14 +167,7 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         }
         //Log.i(DEBUG_TAG, "Finished doing that [Profiles]");
     }
-    /*
-     *@Override
-     *public boolean onCreateOptionsMenu(Menu menu) {
-     *    boolean result = super.onCreateOptionsMenu(menu);
-     *    menu.add(0, INSERT_ID, 0, R.string.menu_show);
-     *    return result;
-     *}
-     */
+
     public void onClick(View v){
         int profNum = -1;
 
@@ -282,43 +237,4 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         return true;
     }
 
-    /*
-     *public Dialog onCreateDialog(int id){
-     *    Log.i(DEBUG_TAG, "onCreateDialog was called [ProfileList]");
-     *    Dialog dialog = new Dialog(this);
-     *    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-     *    dialog.setContentView(R.layout.help_dialog);
-     *   
-     *    Button done = (Button) dialog.findViewById(R.id.ok_help);
-     *    Log.i(DEBUG_TAG, "Setting click listener [HelpDialog]");
-     *    done.setOnClickListener(new View.OnClickListener(){
-     *        @Override
-     *        public void onClick(View v){
-     *            finish();
-     *        }
-     *    });
-     *    return dialog;
-     *}
-     */
-/*
- *    public void setupShortcut(){
- *        //Log.i(DEBUG_TAG, "trying to setup shortcut [ProfileList]");
- *        Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
- *        shortcutIntent.setClassName(this, this.getClass().getName());
- *        shortcutIntent.putExtra(EXTRA_KEY, 1);
- *
- *        // Then, set up the container intent (the response to the caller)
- *
- *        Intent intent = new Intent();
- *        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
- *        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.shortcut_name));
- *        Parcelable iconResource = Intent.ShortcutIconResource.fromContext(
- *                this,  R.drawable.app_sample_code);
- *        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
- *
- *        // Now, return the result to the launcher
- *
- *        setResult(RESULT_OK, intent);
- *    }
- */
 }
