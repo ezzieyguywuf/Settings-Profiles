@@ -34,13 +34,14 @@ public class ProfilesDbHelper{
     public static final String SHOW_HELP = "show_help_yesno";
     public static final String TITLE = "title";
     public static final String PROFILE_NAME = "profile_name";
+    public static final String NUMBER_OF_PROFILES = "number_of_profiles";
 
     // note: most of this was copied from the Android notepad tutorial
     // so look there if you don't get it.
     private static final String DATABASE_CREATE =
         "create table profiles (profilenum integer not null, setting string not null, value string not null, UNIQUE(profilenum, setting) ON CONFLICT REPLACE);";
     private static final String DATABASE_NAME = "quickprofiles";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String TAG = "ProfilesDbAdapter";
     private static DatabaseHelper mDbHelper;
@@ -61,7 +62,7 @@ public class ProfilesDbHelper{
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             //Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                     //+ newVersion + ", which will destroy all old data");
-            db.execSQL("DROP TABLE IF EXISTS notes");
+            db.execSQL("DROP TABLE IF EXISTS profiles");
             onCreate(db);
         }
     }

@@ -10,6 +10,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.appwidget.AppWidgetManager;
 
 import android.os.Bundle;
 
@@ -35,6 +36,8 @@ import android.widget.ToggleButton;
 import android.bluetooth.BluetoothAdapter;
 import android.net.wifi.WifiManager;
 import android.widget.EditText;
+import android.content.ComponentName;
+import android.widget.RemoteViews;
 //TODO add - screen brightness
 //         - ringer on/off
 //         - volume control
@@ -83,23 +86,22 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        Log.i(DEBUG_TAG, "onCreate is called [ProfileList]");
+        //Log.i(DEBUG_TAG, "onCreate is called [ProfileList]");
         Bundle extras = getIntent().getExtras();
 
         // Find out which profile we're dealing with. 
         mProfNum = extras.getInt(Profiles.EXTRA_KEY);
-        Log.i(DEBUG_TAG, "Retrieved "+mProfNum+" as profile number [ProfileList]");
+        //Log.i(DEBUG_TAG, "Retrieved "+mProfNum+" as profile number [ProfileList]");
         // If we weren't passed the Prof Num, get it from the savedInstanceState
         if (mProfNum==0){
-            Log.i(DEBUG_TAG, "Trying to read profNum... [ProfileList]");
+            //Log.i(DEBUG_TAG, "Trying to read profNum... [ProfileList]");
             mProfNum = savedInstanceState.getInt(Profiles.EXTRA_KEY);
-            Log.i(DEBUG_TAG, "Resorting to savedInstanceState. mProfNum = "+mProfNum);
+            //Log.i(DEBUG_TAG, "Resorting to savedInstanceState. mProfNum = "+mProfNum);
         }
 
         this.setTitle(this.getString(R.string.profile)+": "+String.valueOf(mProfNum));
         mHandler = new SettingHandler(this, mProfNum);
         mHandler.mWindow = getWindow();
-        mHandler.mDbHelper.open();
         mCx = this;
 
         setContentView(R.layout.settings);
@@ -109,6 +111,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
 
         // This is for the brightness bar.
         mBrightnessLevel = (SeekBar) findViewById(R.id.brightness_setting);
+        //Log.i(DEBUG_TAG, "Trying to set screen brightness");
         mBrightnessLevel.setMax(255-SCREEN_BRIGHTNESS_OFFSET); // 255 is the max, but we offset this by SCREEN_BRIGHTNESS_OFFSET 
                                                                 // cuz we don't want the user to set the brightness to 0 
         mBrightnessLevel.setOnSeekBarChangeListener(this);
@@ -151,10 +154,10 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
     @Override
     public void onResume(){
         super.onResume();
-        Log.i(DEBUG_TAG, "Trying to resume [ProfileList]");
-        mHandler.mDbHelper.open();
-
-        Log.i(DEBUG_TAG, "Ok, first call to mHandler succeeded [ProfileList]");
+        //Log.i(DEBUG_TAG, "Flags are "+getIntent().getFlags()+" [Profileslist]");
+        //Log.i(DEBUG_TAG, "Trying to resume [ProfileList]");
+        //Log.i(DEBUG_TAG, "calling activity is "+getCallingActivity()+" [ProfileList]");
+        //Log.i(DEBUG_TAG, "Ok, first call to mHandler succeeded [ProfileList]");
         // Check if bluetooth is supported
         int check = mHandler.setSetting(ENUM_BLUETOOTH);
         if (check == -1){
@@ -171,12 +174,11 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
 
         mHandler.setProfile();
         updateUI();
-        Log.i(DEBUG_TAG, "Success [ProfileList]");
+        //Log.i(DEBUG_TAG, "Success [ProfileList]");
     }
 
     @Override
     public void onPause(){
-        mHandler.mDbHelper.close();
         //Log.i(DEBUG_TAG, "Unregistering receiver [ProfileListe]");
         unregisterReceiver(mBluetoothReceiver);
         unregisterReceiver(mWifiReceiver);
@@ -187,7 +189,6 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
             mDialog.dismiss();
         }
         super.onPause();
-        //finish();
     }
 
     class BluetoothReceiver extends BroadcastReceiver {
@@ -457,9 +458,26 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
 
                 EditText profileNameText = (EditText) mDialog.findViewById(R.id.profile_name);
                 String test = profileNameText.getText().toString();
-                Log.i(DEBUG_TAG, "Setting profile name for profile number "+mHandler.getProf()+" [ProfileList]");
+                //Log.i(DEBUG_TAG, "Setting profile name for profile number "+mHandler.getProf()+" [ProfileList]");
                 mHandler.writeSetting(SettingHandler.SettingsEnum.PROFILE_NAME, test);
                 mDialog.dismiss();
+
+                // update our AppWidget text values.
+                //Log.i(DEBUG_TAG, "Trying to update AppWidget...");
+                //ComponentName thisReceiver = new ComponentName("com.abi.profiles", "com.abi.profiles.MyWidgetProvider");
+                //AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+                //int[] appWidgetIds = appWidgetManager.getAppWidgetIds(thisReceiver);
+                //RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.widget);
+                //for (int i=0; i<appWidgetIds.length; i++){
+                    //Log.i(DEBUG_TAG, "AppWidget ID = "+appWidgetIds[i]+" [Profiles]");
+                    //appWidgetManager.updateAppWidget(appWidgetIds[i], views);
+                //}
+
+                ComponentName myWidget = new ComponentName(this, MyWidgetProvider.class);
+                AppWidgetManager manager = AppWidgetManager.getInstance(this);
+                RemoteViews newView = MyWidgetProvider.setText(this);
+                manager.updateAppWidget(myWidget, newView);
+
                 updateUI(SettingHandler.SettingsEnum.PROFILE_NAME);
                 break;
 
@@ -607,8 +625,10 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
                 //Log.i(DEBUG_TAG, "set successful  [ProfileList]");
                 break;
             case R.id.ringer_volume:
-                progress = (TextView) mDialog.findViewById(R.id.ring_value);
-                progress.setText(String.valueOf(level));
+                if (userInit){
+                    progress = (TextView) mDialog.findViewById(R.id.ring_value);
+                    progress.setText(String.valueOf(level));
+                }
 
                 String notification_bind = mHandler.getSetting(ENUM_NOTIFICATION_BIND);
                 //Log.i(DEBUG_TAG, "the value of notification bind is "+notification_bind+" [ProfileList]");
@@ -620,24 +640,34 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
                 }
                 break;
             case R.id.notification_volume:
-                progress = (TextView) mDialog.findViewById(R.id.notif_value);
-                progress.setText(String.valueOf(level));
+                if (userInit){
+                    progress = (TextView) mDialog.findViewById(R.id.notif_value);
+                    progress.setText(String.valueOf(level));
+                }
                 break;
             case R.id.media_volume:
-                progress = (TextView) mDialog.findViewById(R.id.media_value);
-                progress.setText(String.valueOf(level));
+                if (userInit){
+                    progress = (TextView) mDialog.findViewById(R.id.media_value);
+                    progress.setText(String.valueOf(level));
+                }
                 break;
             case R.id.alarm_volume:
-                progress = (TextView) mDialog.findViewById(R.id.alarm_value);
-                progress.setText(String.valueOf(level));
+                if (userInit){
+                    progress = (TextView) mDialog.findViewById(R.id.alarm_value);
+                    progress.setText(String.valueOf(level));
+                }
                 break;
             case R.id.voice_call_volume:
-                progress = (TextView) mDialog.findViewById(R.id.voice_value);
-                progress.setText(String.valueOf(level));
+                if (userInit){
+                    progress = (TextView) mDialog.findViewById(R.id.voice_value);
+                    progress.setText(String.valueOf(level));
+                }
                 break;
             case R.id.system_volume:
-                progress = (TextView) mDialog.findViewById(R.id.system_value);
-                progress.setText(String.valueOf(level));
+                if (userInit){
+                    progress = (TextView) mDialog.findViewById(R.id.system_value);
+                    progress.setText(String.valueOf(level));
+                }
                 break;
         }
     }

@@ -7,6 +7,8 @@ import android.content.Context;
 
 import android.database.SQLException;
 
+import android.util.Log;
+
 import android.media.AudioManager;
 
 import android.net.wifi.WifiManager;
@@ -14,7 +16,7 @@ import android.net.wifi.WifiManager;
 import android.provider.Settings.Secure;
 import android.provider.Settings.System;
 
-import android.util.Log;
+
 
 import android.view.Window;
 import android.view.WindowManager;
@@ -52,7 +54,7 @@ public class SettingHandler{
     public SettingHandler(Context cx, int profNum){
         mCx = cx;
         mCr = mCx.getContentResolver();
-        mProfNum = profNum;
+        setProf(profNum);
         mDbHelper = new ProfilesDbHelper(mCx);
         mAudioManager = (AudioManager) mCx.getSystemService(mCx.AUDIO_SERVICE);
 
@@ -154,13 +156,20 @@ public class SettingHandler{
                 value = "-1";
                 writeSetting(SettingsEnum.PROFILE_NAME, value);
                 break;
+            case SHOW_HELP:
+                value = "1";
+                writeSetting(SettingsEnum.SHOW_HELP, value);
+                break;
         }
+        //Log.i(DEBUG_TAG, "Returning "+value+" [SettingHandler]");
         return value;
     }
 
     public void setProfile(){
         for (SettingsEnum item: SettingsEnum.values()){
             if (item == SettingsEnum.TITLE) continue;
+            if (item == SettingsEnum.NUMBER_OF_PROFILES) continue;
+            if (item == SettingsEnum.SHOW_HELP) continue;
             setSetting(item);
         }
     }
@@ -199,7 +208,7 @@ public class SettingHandler{
                 System.putString(mCr, System.SCREEN_BRIGHTNESS, value);
                 if (mWindow instanceof Window){
                     WindowManager.LayoutParams lp = mWindow.getAttributes();
-                    Log.i(DEBUG_TAG, "Setting brightness to "+(Integer.valueOf(value) )+" [SettingHandler]");
+                    //Log.i(DEBUG_TAG, "Setting brightness to "+(Integer.valueOf(value) )+" [SettingHandler]");
                     lp.screenBrightness = Integer.valueOf(value) / 255.0f;
                     mWindow.setAttributes(lp);
                 }
@@ -372,9 +381,9 @@ public class SettingHandler{
                 break;
             //case GPS:
                 //break;
-            //case SHOW_HELP:
+            case SHOW_HELP:
                 // do nothing
-                //break;
+                break;
 
         }
         //Log.e(DEBUG_TAG, "This should not happen. [SettingHandler]");
@@ -382,7 +391,8 @@ public class SettingHandler{
     }
 
     public void writeSetting(SettingsEnum setting, String value){
-        //Log.i(DEBUG_TAG, "Write called with "+setting+" "+value+" [SettingHandler]");
+        //Log.i(DEBUG_TAG, "Write called with "+setting+" "+value+" for profile "+mProfNum+" [SettingHandler]");
+        mDbHelper.open();
         switch (setting){
             case BRIGHTNESS:
                 //Log.i(DEBUG_TAG, "I am setting "+value+" to profile "+mProfNum);
@@ -427,78 +437,115 @@ public class SettingHandler{
                 //Log.i(DEBUG_TAG, "Storing "+value+" as bind setting [SettingHandler]");
                 mDbHelper.createSetting(mProfNum, mDbHelper.NOTIFICATION_BIND, value);
                 break;
+            case NUMBER_OF_PROFILES:
+                mDbHelper.createSetting(mProfNum, mDbHelper.NUMBER_OF_PROFILES, value);
+                break;
             //case GPS:
                 //mDbHelper.createSetting(mProfNum, mDbHelper.GPS, value);
                 //break;
-            //case SHOW_HELP:
-                //mDbHelper.createSetting(mProfNum, mDbHelper.SHOW_HELP, value);
-                //break;
+            case SHOW_HELP:
+                mDbHelper.createSetting(mProfNum, mDbHelper.SHOW_HELP, value);
+                break;
             case TITLE:
                 //Log.i(DEBUG_TAG, "Writing "+value+" to TITLE [SettingHandler]");
                 mDbHelper.createSetting(mProfNum, mDbHelper.TITLE, value);
                 break;
             case PROFILE_NAME:
-                Log.i(DEBUG_TAG, "Writing to profile name "+value+" [SettingHandler]");
+                //Log.i(DEBUG_TAG, "Writing to profile name "+value+" [SettingHandler]");
                 mDbHelper.createSetting(mProfNum, mDbHelper.PROFILE_NAME, value);
                 break;
 
         }
+        mDbHelper.close();
     }
 
     public String getSetting(SettingsEnum setting){
         //Log.i(DEBUG_TAG, "Read called with "+setting+" [SettingHandler]");
+        String value = null;
+        mDbHelper.open();
         switch(setting){
             case BRIGHTNESS:
                 //Log.i(DEBUG_TAG, "fetching brightness setting [SettingHandler]");
-                return mDbHelper.fetchSetting(mProfNum, System.SCREEN_BRIGHTNESS);
+                value =  mDbHelper.fetchSetting(mProfNum, System.SCREEN_BRIGHTNESS);
+                break;
             case RINGER:
                 //Log.i(DEBUG_TAG, "fetching ringer setting [SettingHandler]");
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.RINGER);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.RINGER);
+                break;
             case VIBRATE:
                 //Log.i(DEBUG_TAG, "returning vibrate setting [SettingHandler]");
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.VIBRATE);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.VIBRATE);
+                break;
             case RINGER_VOLUME:
                 //Log.i(DEBUG_TAG, "Returing ringer volume [SettingHandler]");
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.RINGER_VOLUME);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.RINGER_VOLUME);
+                break;
             case NOTIFICATION_VOLUME:
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.NOTIFICATION_VOLUME);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.NOTIFICATION_VOLUME);
+                break;
             case MEDIA_VOLUME:
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.MEDIA_VOLUME);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.MEDIA_VOLUME);
+                break;
             case ALARM_VOLUME:
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.ALARM_VOLUME);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.ALARM_VOLUME);
+                break;
             case VOICE_VOLUME:
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.VOICE_VOLUME);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.VOICE_VOLUME);
+                break;
             case SYSTEM_VOLUME:
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.SYSTEM_VOLUME);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.SYSTEM_VOLUME);
+                break;
             case BLUETOOTH:
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.BLUETOOTH);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.BLUETOOTH);
+                break;
             case WIFI:
                 //Log.i(DEBUG_TAG, "Returning Wifi state [SettingHandler]");
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.WIFI);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.WIFI);
+                break;
             case NOTIFICATION_BIND:
                 //Log.i(DEBUG_TAG, "Returning bind state [SettingHandler]");
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.NOTIFICATION_BIND);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.NOTIFICATION_BIND);
+                break;
             //case GPS:
-                //return mDbHelper.fetchSetting(mProfNum, mDbHelper.GPS);
-            //case SHOW_HELP:
+                //value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.GPS);
+            case SHOW_HELP:
                 //Log.i(DEBUG_TAG, "Trying to return setting");
-                //return mDbHelper.fetchSetting(mProfNum, mDbHelper.SHOW_HELP);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.SHOW_HELP);
+                break;
             case TITLE:
                 //Log.i(DEBUG_TAG, "Returning from title name "+mDbHelper.fetchSetting(mProfNum, mDbHelper.TITLE)+" [SettingHandler]");
-                return mDbHelper.fetchSetting(mProfNum, mDbHelper.TITLE);
+                value =  mDbHelper.fetchSetting(mProfNum, mDbHelper.TITLE);
+                break;
             case PROFILE_NAME:
-                return(mDbHelper.fetchSetting(mProfNum, mDbHelper.PROFILE_NAME));
+                value = (mDbHelper.fetchSetting(mProfNum, mDbHelper.PROFILE_NAME));
+                break;
 
         }
-        return "0";
+        if (value == null){
+            value = getDefaults(setting);
+        }
+        //Log.i(DEBUG_TAG, "Returning "+value+" [SettingHandler]");
+        mDbHelper.close();
+        return value;
     }
 
     public void setProf(int profNum){
+        //Log.i(DEBUG_TAG, "Profile number set to "+profNum+" [Settinghandler]");
         mProfNum = profNum;
     }
 
     public int getProf(){
         return mProfNum;
+    }
+
+    public void addProfile(){
+        Integer maxProf = Integer.valueOf(this.getSetting(SettingsEnum.NUMBER_OF_PROFILES));
+        if (maxProf == null){
+            this.writeSetting(SettingsEnum.NUMBER_OF_PROFILES, String.valueOf(6));
+        }
+        else{
+            this.writeSetting(SettingsEnum.NUMBER_OF_PROFILES, String.valueOf(maxProf+1));
+        }
     }
 
     enum SettingsEnum {
@@ -515,8 +562,9 @@ public class SettingHandler{
         NOTIFICATION_BIND,
         WIFI,
         TITLE,
-        PROFILE_NAME
+        PROFILE_NAME,
+        NUMBER_OF_PROFILES,
         //GPS,
-        //SHOW_HELP
+        SHOW_HELP
     }
 }

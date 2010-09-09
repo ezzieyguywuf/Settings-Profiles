@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.abi.profiles"
-      android:versionCode="9"
-      android:versionName="1.4.0">
+      android:versionCode="13"
+      android:versionName="1.5.3">
       <uses-sdk android:minSdkVersion="3" />
       <application android:label="@string/app_name"
           android:icon="@drawable/profile_icon">
@@ -16,9 +16,10 @@
           <activity android:name=".SettingStore"/>
           <activity android:name=".ProfileList"/>
           <activity android:name=".HelpDialog"/>
-          <activity android:name=".BlankActivity" android:theme="@android:style/Theme.Dialog"/>
+          <activity android:name=".BlankActivity" android:taskAffinity="com.android.launcher" 
+              android:theme="@android:style/Theme.Dialog"/>
           <activity android:name="com.bwx.bequick.MainSettingsActivity"/>
-          <receiver android:name=".MyWidgetProvider" android:label="My Widget">
+          <receiver android:name=".MyWidgetProvider" android:label="Settings Widget">
               <intent-filter>
                   <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                   <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />

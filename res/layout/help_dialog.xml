@@ -8,6 +8,9 @@
     <TextView android:id="@+id/help_text"
         style="@style/help_text"
         android:text="@string/help_text"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="3dp"
         android:layout_weight="1"/>
     <LinearLayout android:orientation="horizontal"
         style="@style/setting_padding"
@@ -17,15 +20,17 @@
         <CheckBox android:id="@+id/show_dialog_pref"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="0"/>
         <TextView style="@style/help_text"
             android:text="@string/help_check_text"
+            android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="1"/>
     </LinearLayout>
     <Button android:id="@+id/ok_help"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_weight="0"
-        android:gravity="center"
+        android:layout_gravity="center_vertical|center_horizontal"
         android:text="@string/done"/>
 </LinearLayout>

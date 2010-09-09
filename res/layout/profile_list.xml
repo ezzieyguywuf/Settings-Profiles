@@ -15,6 +15,10 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
+    <Button android:id="@+id/buyLicense"
+            style="@style/main_buttons"
+            android:visibility="gone"
+            android:text="@string/purchase_license"/>
     <Button android:id="@+id/Profile1"
             style="@style/main_buttons"
             android:text="@string/Profile1"/>
@@ -30,6 +34,15 @@
     <Button android:id="@+id/Profile5"
             style="@style/main_buttons"
             android:text="@string/Profile5"/>
+    <Button android:id="@+id/Profile6"
+            style="@style/main_buttons"
+            android:text="@string/Profile6"/>
+    <Button android:id="@+id/Profile7"
+            style="@style/main_buttons"
+            android:text="@string/Profile7"/>
+    <Button android:id="@+id/Profile8"
+            style="@style/main_buttons"
+            android:text="@string/Profile8"/>
     </LinearLayout>
 </LinearLayout>
 </ScrollView>
