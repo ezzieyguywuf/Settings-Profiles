@@ -23,9 +23,9 @@ class myDialogs {
      */
 
     public Dialog createDialog(ProfileList mpList, int mId) {
-        Log.i(DEBUG_TAG, "creating dialog [myDialogs]");
+        //Log.i(DEBUG_TAG, "creating dialog [myDialogs]");
         Dialog dialog = new Dialog(mpList);
-        Log.i(DEBUG_TAG, "Our object is "+dialog+" [myDialogs]");
+        //Log.i(DEBUG_TAG, "Our object is "+dialog+" [myDialogs]");
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         switch (mId){

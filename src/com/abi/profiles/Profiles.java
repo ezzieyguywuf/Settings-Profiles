@@ -221,9 +221,9 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         //Log.i(DEBUG_TAG, "Trying to prepare dialog "+id+" "+handler+" "+dg+" [Profiles]");
         switch (id){
             case HELP_DIALOG_ID:
-                String isBoxChecked = handler.getSetting(SettingHandler.SettingsEnum.SHOW_HELP);
+                String showHelp = handler.getSetting(SettingHandler.SettingsEnum.SHOW_HELP);
                 CheckBox helpBox = (CheckBox) dg.findViewById(R.id.show_dialog_pref);
-                if (isBoxChecked.equals("1")){
+                if (showHelp.equals("0")){
                     helpBox.setChecked(true);
                 }
                 else{

@@ -12,16 +12,13 @@ Buildfile: /home/wolfie/Program/Android/Profiles/build.xml
 
 -resource-src:
      [echo] Generating R.java / Manifest.java from the resources...
-     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/values/.styles.xml.swp')
-     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.no_widget_dialog.xml.swp')
-     [exec]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.help_dialog.xml.swp')
 
 -aidl:
      [echo] Compiling aidl files into Java classes...
 
 compile:
     [javac] /opt/android-sdk-update-manager/platforms/android-2.0/templates/android_rules.xml:248: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
-    [javac] Compiling 3 source files to /home/wolfie/Program/Android/Profiles/bin/classes
+    [javac] Compiling 12 source files to /home/wolfie/Program/Android/Profiles/bin/classes
 
 -dex:
      [echo] Converting compiled files and external libraries into /home/wolfie/Program/Android/Profiles/bin/classes.dex...
@@ -30,9 +27,6 @@ compile:
 -package-resources:
      [echo] Packaging resources
  [aaptexec] Creating full resource package...
-     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/values/.styles.xml.swp')
-     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.no_widget_dialog.xml.swp')
-     [null]     (skipping hidden file '/home/wolfie/Program/Android/Profiles/res/layout/.help_dialog.xml.swp')
 
 -package-debug-sign:
 [apkbuilder] Creating Profiles-debug-unaligned.apk and signing it with a debug key...

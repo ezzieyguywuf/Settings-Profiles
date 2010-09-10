@@ -189,6 +189,7 @@ public class ProfileList extends Activity implements OnClickListener, OnSeekBarC
             mDialog.dismiss();
         }
         super.onPause();
+        finish();
     }
 
     class BluetoothReceiver extends BroadcastReceiver {
