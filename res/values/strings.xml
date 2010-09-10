@@ -4,7 +4,6 @@
     <string name="empty_setting">There are no settings to show. *Bug*</string>
     <string name="no_brightness">You have no setting! OH NO!</string>
     <string name="menu_show">Show Next Setting</string>
-    <string name="purchase_license">Purchase License from Market\n (buy to delete button)</string>
     <string name="Profile1">First Profile</string>
     <string name="Profile2">Second Profile</string>
     <string name="Profile3">Third Profile</string>
@@ -15,6 +14,7 @@
     <string name="Profile8">Eighth Profile</string>
     <string name="profile">Profile</string>
 
+    <string name="purchase_license">Purchase License from Market\n (buy to delete button)</string>
     <string name="add_profile">Add Profile</string>
     <string name="show_help_dialog">Show Help Dialog</string>
 

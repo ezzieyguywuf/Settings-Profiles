@@ -57,22 +57,6 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         //Log.i(DEBUG_TAG, "Trying to set content view widget should work [Profiles]");
         setContentView(R.layout.profile_list);
 
-        // Find out if we need to display the "Buy" button or not
-        Intent checkIntent = new Intent();
-        checkIntent.setAction(getPackageName()+".CheckLicense");
-        sendBroadcast(checkIntent);
-        Button buyButton = (Button) findViewById(R.id.buyLicense);
-        buyButton.setVisibility(android.view.View.VISIBLE);
-        buyButton.setOnClickListener(this);
-        BroadcastReceiver showBuyButton = new BroadcastReceiver(){
-            public void onReceive(Context cx, Intent intent){
-                //Log.i(DEBUG_TAG, "Received broadcast [Profiles]");
-                Button buyButtonInner = (Button) findViewById(R.id.buyLicense);
-                buyButtonInner.setVisibility(android.view.View.GONE);
-            }
-        };
-        IntentFilter showFilter = new IntentFilter(MyWidgetProvider.LICENSE_BROADCAST);
-        registerReceiver(showBuyButton, showFilter);
         // Set up all our button listeners
         mProfile1 = (Button) findViewById(R.id.Profile1);
         mProfile2 = (Button) findViewById(R.id.Profile2);
@@ -111,6 +95,19 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         //TODO implement add profile
         boolean result = super.onCreateOptionsMenu(menu);
         menu.add(0, INSERT_ID, 0, R.string.show_help_dialog);
+        menu.add(0, INSERT_ID+1, 0, R.string.purchase_license);
+        // Find out if we need to display the "Buy" button or not
+        Intent checkIntent = new Intent();
+        checkIntent.setAction(getPackageName()+".CheckLicense");
+        sendBroadcast(checkIntent);
+        BroadcastReceiver showBuyButton = new BroadcastReceiver(){
+            public void onReceive(Context cx, Intent intent){
+                menu.removeItem(INSERT_ID+2);
+            }
+        };
+        IntentFilter showFilter = new IntentFilter(MyWidgetProvider.LICENSE_BROADCAST);
+        registerReceiver(showBuyButton, showFilter);
+
         return result;
     }
 
@@ -122,6 +119,15 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
                 //addProfile();
                 //Log.i(DEBUG_TAG, "Showing dialog from options [Profiles]");
                 showDialog(HELP_DIALOG_ID);
+                return true;
+            case INSERT_ID+1:
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                Uri data = new Uri.Builder().scheme(BlankActivity.MARKET_SCHEME).authority(BlankActivity.MARKET_SEARCH).appendQueryParameter(BlankActivity.MARKET_KEY,BlankActivity.MARKET_PACKAGE_NAME+BlankActivity.LICENSE_PACKAGE).build();
+                intent.setData(data);
+                //Log.i(DEBUG_TAG, "Performing search with "+data+" [BlankActivity]");
+                startActivity(intent);
+
                 return true;
         }
 
@@ -313,14 +319,6 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
                 break;
             case R.id.Profile8:
                 profNum = 8;
-                break;
-            case R.id.buyLicense:
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                Uri data = new Uri.Builder().scheme(BlankActivity.MARKET_SCHEME).authority(BlankActivity.MARKET_SEARCH).appendQueryParameter(BlankActivity.MARKET_KEY,BlankActivity.MARKET_PACKAGE_NAME+BlankActivity.LICENSE_PACKAGE).build();
-                intent.setData(data);
-                //Log.i(DEBUG_TAG, "Performing search with "+data+" [BlankActivity]");
-                startActivity(intent);
                 break;
             case R.id.ok_help:
                 removeDialog(HELP_DIALOG_ID);
