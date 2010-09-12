@@ -270,6 +270,15 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
                     case 5:
                         mProfile5.setText(text);
                         break;
+                    case 6:
+                        mProfile6.setText(text);
+                        break;
+                    case 7:
+                        mProfile7.setText(text);
+                        break;
+                    case 8:
+                        mProfile8.setText(text);
+                        break;
                 }
             }
         }
