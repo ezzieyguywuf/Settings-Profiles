@@ -57,7 +57,6 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         Log.i(DEBUG_TAG, "Trying to set content view widget should work [Profiles]");
         setContentView(R.layout.profile_list);
 
-<<<<<<< HEAD
         // Find out if we need to display the "Buy" button or not
         Intent checkIntent = new Intent();
         checkIntent.setAction(getPackageName()+".CheckLicense");
@@ -74,8 +73,6 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         };
         IntentFilter showFilter = new IntentFilter(MyWidgetProvider.LICENSE_BROADCAST);
         registerReceiver(showBuyButton, showFilter);
-=======
->>>>>>> 8f4a064... widget is ready to go! pre-delogging.
         // Set up all our button listeners
         mProfile1 = (Button) findViewById(R.id.Profile1);
         mProfile2 = (Button) findViewById(R.id.Profile2);
@@ -279,7 +276,6 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         //Log.i(DEBUG_TAG, "Finished doing that [Profiles]");
     }
 
-<<<<<<< HEAD
     private void addProfile(){
         //TODO implement this
         mHandler.setProf(0);
@@ -290,8 +286,6 @@ public class Profiles extends Activity implements OnClickListener, OnLongClickLi
         //TODO implement this
     }
 
-=======
->>>>>>> 8f4a064... widget is ready to go! pre-delogging.
     public void onClick(View v){
         int profNum = -1;
         //Log.i(DEBUG_TAG, "OnClick called [Profiles]");
