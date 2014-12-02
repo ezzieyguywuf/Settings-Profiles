@@ -1,0 +1,39 @@
+Created: 12/02/2014
+
+This file will eventually be more informative. For now, I will begin
+to outline how this project is organizeCreated. Probably some of this
+stuff should be stored in the source code files themselves in the form
+of comments...
+
+Classes
+--------
+SettingHandler - Handles settings
+Profiles - This class extends the android "Activity" class. It is
+           the "Set your profile" activity which pops up when the
+           app is started.
+myDialogs - A custom class which handles the various pop-up dialogs
+            that this app uses.
+ProfilesDbHelper - this class in used to write to/from the sqlite
+                   database which stores our different setting
+                   profiles.
+ProfileList - This class also extends the android "Activity" class. It is
+              the "Set your profile settings" activity that pops up when
+              you wish to edit one of your profiles
+MyWidgetProvider - probably has something to do with the widget. This
+                   back-burner stuff right now
+HelpDialog - I'm assuming this is the Help Dialog Popup. I do not see
+             a need to prioritize development on this guy
+
+TODO
+-------
+(in no particular order)
+- update SettingHandler class to account for new things in Android,
+  such as "ambient light sensor" option for screen brightness which my
+  original code did not need to account for
+- update ProfileList to (a) make it less ugly, and (b) make it more
+  responsive. Also, should make it more clear wether you are setting a
+  profile or editing a profile with your action
+- implement "Android Action Bar"
+- Review backwards compatibility and how to maintain with updates
+- comment code!
+- more?
