@@ -36,4 +36,8 @@ TODO
 - implement "Android Action Bar"
 - Review backwards compatibility and how to maintain with updates
 - comment code!
+- incorporate settings buttons in to "Power Down" dialog, usually
+  available by long-pressing power button
+- incorporate settings buttons in to lock screen
+- incorporate settings buttons in to drop-down
 - more?
