@@ -1,9 +1,8 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.abi</groupId>
+    <groupId>com.abi.profiles</groupId>
     <artifactId>gs-maven-android</artifactId>
     <version>0.1.0</version>
     <packaging>apk</packaging>
@@ -18,7 +17,14 @@
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
+            <!--<version>1.5_r4</version>-->
             <version>4.1.1.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>support-v4</artifactId>
+            <version>r7</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
