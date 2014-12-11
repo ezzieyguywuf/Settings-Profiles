@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:orientation="horizontal">
+    <Button android:id="@+id/prof1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="1"
+        android:layout_weight="1"/>
+    <Button android:id="@+id/prof2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="2"
+        android:layout_weight="1"/>
+    <Button android:id="@+id/prof3"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="3"
+        android:layout_weight="1"/>
+    <Button android:id="@+id/prof4"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="4"
+        android:layout_weight="1"/>
+    <Button android:id="@+id/prof5"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:text="5"
+        android:layout_weight="1"/>
+</LinearLayout>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="8sp"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:text="@string/missing_license"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="5sp"
+        android:layout_weight="0"/>
+
+  <View style="@style/horiz_bar"/>
+
+   <LinearLayout android:orientation="horizontal"
+      android:layout_gravity="center"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+        <Button android:id="@+id/widget_dialog_done"
+              android:layout_width="wrap_content"
+              android:layout_height="fill_parent"
+              android:gravity="center"
+              android:layout_gravity="center"
+              android:text="@string/done"
+              android:layout_weight="1"/>
+        <Button android:id="@+id/widget_perform_search"
+              android:layout_width="wrap_content"
+              android:layout_height="fill_parent"
+              android:gravity="center"
+              android:layout_gravity="center"
+              android:text="@string/perform_search"
+              android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</LinearLayout>
